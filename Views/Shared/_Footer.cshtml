@@ -1,0 +1,50 @@
+<footer class="bg-footer text-white pt-5">
+    <div class="container">
+        <div class="row justify-content-between gy-4">
+            <div class="col-12 col-md-auto d-flex align-items-center">
+                <a class="d-inline-flex align-items-center gap-2 bg-white rounded-pill px-3 py-2 text-decoration-none" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/iborrowLogo.svg" alt="iBorrow logo" class="brand-logo" />
+                    <span class="d-flex flex-column lh-sm">
+                        <span class="fw-bold fs-5 text-dark">iBorrow</span>
+                        <span class="small text-secondary">Library System</span>
+                    </span>
+                </a>
+            </div>
+
+            <div class="col-12 col-md-auto">
+                <div class="d-flex flex-wrap footer-columns-gap">
+                    <div>
+                        <h5 class="fw-bold mb-2">Quick Links</h5>
+                        <div class="d-flex flex-column gap-2">
+                            <a class="footer-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="footer-link" asp-area="" asp-controller="Library" asp-action="Index">Library</a>
+                            <a class="footer-link" asp-area="" asp-controller="Borrowing" asp-action="Index">Borrowed Books</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="fw-bold mb-2">Help</h5>
+                        <div class="d-flex flex-column gap-2">
+                            <a class="footer-link" href="#">FAQs</a>
+                            <a class="footer-link" href="#">Return Policy</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h5 class="fw-bold mb-2">Contact</h5>
+                        <div class="d-flex flex-column gap-2 small fw-semibold">
+                            <a class="footer-link" href="mailto:kristine.tumulac@iacademy.edu.ph">kristine.tumulac@iacademy.edu.ph</a>
+                            <span>(number)</span>
+                            <span>(location)</span>
+                            <span>(developers?)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center py-3 mt-4 small fw-semibold">
+        &copy; @DateTime.Now.Year iBorrow Library System. All rights reserved.
+    </div>
+</footer>

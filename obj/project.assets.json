@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 3,
   "targets": {
     "net10.0": {}
   },
@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "/home/bombom/.nuget/packages/": {}
+    "C:\\Users\\j\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/bombom/Development/iBorrow/iBorrow.csproj",
+      "projectUniqueName": "C:\\Users\\j\\Documents\\CodingProjects\\iborrow\\iBorrow\\iBorrow.csproj",
       "projectName": "iBorrow",
-      "projectPath": "/home/bombom/Development/iBorrow/iBorrow.csproj",
-      "packagesPath": "/home/bombom/.nuget/packages/",
-      "outputPath": "/home/bombom/Development/iBorrow/obj/",
+      "projectPath": "C:\\Users\\j\\Documents\\CodingProjects\\iborrow\\iBorrow\\iBorrow.csproj",
+      "packagesPath": "C:\\Users\\j\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\j\\Documents\\CodingProjects\\iborrow\\iBorrow\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/bombom/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\j\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -30,7 +30,6 @@
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {}
         }
@@ -45,11 +44,10 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.300"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net10.0": {
-        "framework": "net10.0",
         "targetAlias": "net10.0",
         "imports": [
           "net461",
@@ -70,7 +68,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.301/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

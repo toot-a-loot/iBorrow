@@ -1,0 +1,21 @@
+:root {
+  --color-white: #ffffff;
+  --color-black: #1a1a1a;
+  --color-primary: #2b3fd0;
+  --color-primary-dark: #232fb0;
+  --color-primary-text: #1a2b6d;
+  --color-footer: #0a0a5c;
+  --color-gray: #6c757d;
+  --color-border: #dee2e6;
+  --color-footer-hover: #c9d1ff;
+
+  --container-width: 1700px;
+  --content-width: 1200px;
+
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+}

@@ -1,0 +1,30 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-white);
+}
+
+a {
+  color: #0077cc;
+}
+
+/* shared container */
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* main content */
+
+.main-body {
+  background: var(--color-white);
+  min-height: 70vh;
+
+  max-width: var(--content-width);
+  margin: 0 auto;
+
+  padding: var(--spacing-lg);
+}

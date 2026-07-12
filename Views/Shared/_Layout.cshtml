@@ -6,12 +6,15 @@
     <title>@ViewData["Title"] - iBorrow</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/variables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/iBorrow.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header class="main-header">
-        <div class="header-contents">
+        <div class="header-contents container">
             <a class="brand" asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="~/images/iborrowlogo.svg" alt="iBorrow logo" class="brand-logo" />
                 <span class="brand-text">
@@ -39,6 +42,47 @@
     <main role="main" class="main-body">
         @RenderBody()
     </main>
+
+    <footer class="main-footer">
+        <div class="footer-contents container">
+            <a class="brand footer-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <span class="footer-logo-badge">
+                    <img src="~/images/iborrowLogo.svg" alt="iBorrow logo" class="brand-logo" />
+                    <span class="brand-text">
+                        <span class="brand-name">iBorrow</span>
+                        <span class="brand-tagline">Library System</span>
+                    </span>
+                </span>
+            </a>
+
+            <div class="footer-columns">
+                <div class="footer-col">
+                    <h5>Quick Links</h5>
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a asp-area="" asp-controller="Library" asp-action="Index">Library</a>
+                    <a asp-area="" asp-controller="Borrowing" asp-action="Index">Borrowed Books</a>
+                </div>
+
+                <div class="footer-col">
+                    <h5>Help</h5>
+                    <a href="#">FAQs</a>
+                    <a href="#">Return Policy</a>
+                </div>
+
+                <div class="footer-col">
+                    <h5>Contact</h5>
+                    <a href="mailto:kristine.tumulac@iacademy.edu.ph">kristine.tumulac@iacademy.edu.ph</a>
+                    <span>(number)</span>
+                    <span>(location)</span>
+                    <span>(developers?)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; @DateTime.Now.Year iBorrow Library System. All rights reserved.
+        </div>
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

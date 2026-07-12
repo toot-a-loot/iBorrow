@@ -1,32 +1,18 @@
-html, body {
-  margin: 0;
-  padding: 0;
-  background-color: #ffffff;
-}
-
-a {
-  color: #0077cc;
-}
-
-/* header */
-
 .main-header {
-  background-color: #ffffff;
+  background: var(--color-white);
   border-top: 4px solid #24272b;
   border-bottom: 1px solid #e2e2e2;
 }
 
 .header-contents {
-    max-width: 1700px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-sm) 0;
 }
 
-/* logo */
+/* brand */
 
 .brand {
   display: flex;
@@ -50,13 +36,13 @@ a {
 .brand-name {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #1a2b6d;
+  color: var(--color-primary-text);
 }
 
 .brand-tagline {
   font-size: 0.65rem;
   font-weight: 500;
-  color: #6c757d;
+  color: var(--color-gray);
 }
 
 /* navigation */
@@ -70,41 +56,47 @@ a {
 }
 
 .nav-main a {
-  color: #1a1a1a;
-  font-weight: 600;
+  color: var(--color-black);
   font-size: 0.95rem;
+  font-weight: 600;
   text-decoration: none;
 }
 
 .nav-main a:hover {
-  color: #2b3fd0;
+  color: var(--color-primary);
 }
 
 .nav-toggle {
   display: none;
   background: none;
-  border: 1px solid #dee2e6;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 6px 10px;
 }
 
+/* login button */
+
 .btn-login {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background-color: #2b3fd0;
-  color: #ffffff;
-  font-weight: 600;
+  gap: var(--spacing-xs);
+
+  background: var(--color-primary);
+  color: var(--color-white);
+
   font-size: 0.9rem;
-  padding: 8px 18px;
+  font-weight: 600;
+
+  padding: var(--spacing-xs) 18px;
+
   border-radius: 8px;
   text-decoration: none;
   flex-shrink: 0;
 }
 
 .btn-login:hover {
-  background-color: #232fb0;
-  color: #ffffff;
+  background: var(--color-primary-dark);
+  color: var(--color-white);
 }
 
 .login-icon {
@@ -116,6 +108,7 @@ a {
 /* responsive */
 
 @media (max-width: 767px) {
+
   .nav-toggle {
     display: inline-block;
     order: 2;
@@ -131,22 +124,12 @@ a {
     flex-basis: 100%;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
-    padding-top: 12px;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-sm);
   }
 
   .nav-main.is-open {
     display: flex;
   }
-}
 
-
-/* main content */
-
-.main-body {
-  background-color: #ffffff;
-  min-height: 70vh;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
 }

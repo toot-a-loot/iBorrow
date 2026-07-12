@@ -1,0 +1,18 @@
+.bg-footer {
+  background: var(--color-footer);
+}
+
+.footer-columns-gap {
+  gap: var(--spacing-xl) 150px;
+}
+
+.footer-link {
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--color-footer-hover);
+}

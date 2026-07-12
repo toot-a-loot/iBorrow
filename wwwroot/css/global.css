@@ -28,3 +28,15 @@ a {
 
   padding: var(--spacing-lg);
 }
+
+/* shared brand assets (header and footer) */
+
+.brand-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.login-icon {
+  width: 16px;
+  height: 16px;
+}

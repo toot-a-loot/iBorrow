@@ -4,85 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - iBorrow</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" asp-append-version="true" />
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/variables.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/footer.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/header.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components/footer.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/iBorrow.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <header class="main-header">
-        <div class="header-contents container">
-            <a class="brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/images/iborrowlogo.svg" alt="iBorrow logo" class="brand-logo" />
-                <span class="brand-text">
-                    <span class="brand-name">iBorrow</span>
-                    <span class="brand-tagline">Library System</span>
-                </span>
-            </a>
+    <partial name="_Header" />
 
-            <button class="nav-toggle" type="button" id="navToggle" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <nav class="nav-main" id="siteNav">
-                <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                <a asp-area="" asp-controller="Library" asp-action="Index">Library</a>
-                <a asp-area="" asp-controller="Borrowing" asp-action="Index">Borrowing</a>
-            </nav>
-
-            <a href="#" class="btn-login">
-                <img src="~/images/userIcon.svg" alt="" class="login-icon" aria-hidden="true" />
-                Login
-            </a>
-        </div>
-    </header>
     <main role="main" class="main-body">
         @RenderBody()
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-contents container">
-            <a class="brand footer-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <span class="footer-logo-badge">
-                    <img src="~/images/iborrowLogo.svg" alt="iBorrow logo" class="brand-logo" />
-                    <span class="brand-text">
-                        <span class="brand-name">iBorrow</span>
-                        <span class="brand-tagline">Library System</span>
-                    </span>
-                </span>
-            </a>
-
-            <div class="footer-columns">
-                <div class="footer-col">
-                    <h5>Quick Links</h5>
-                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    <a asp-area="" asp-controller="Library" asp-action="Index">Library</a>
-                    <a asp-area="" asp-controller="Borrowing" asp-action="Index">Borrowed Books</a>
-                </div>
-
-                <div class="footer-col">
-                    <h5>Help</h5>
-                    <a href="#">FAQs</a>
-                    <a href="#">Return Policy</a>
-                </div>
-
-                <div class="footer-col">
-                    <h5>Contact</h5>
-                    <a href="mailto:kristine.tumulac@iacademy.edu.ph">kristine.tumulac@iacademy.edu.ph</a>
-                    <span>(number)</span>
-                    <span>(location)</span>
-                    <span>(developers?)</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            &copy; @DateTime.Now.Year iBorrow Library System. All rights reserved.
-        </div>
-    </footer>
+    <partial name="_Footer" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

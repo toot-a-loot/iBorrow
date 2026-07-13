@@ -3,3 +3,99 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/library.css" asp-append-version="true" />
 }
+
+<section class="hero-banner d-flex align-items-end">
+    <div class="hero-overlay">
+        <h1 class="hero-title">Borrow Books.</h1>
+        <p class="hero-subtitle">Discover available books</p>
+    </div>
+</section>
+
+<div class="search-card shadow-sm">
+    <div class="d-flex flex-column flex-md-row gap-3 align-items-stretch align-items-md-center">
+        <div class="input-group search-input-group rounded-3 border overflow-hidden flex-grow-1">
+            <span class="input-group-text bg-white border-0 text-primary-brand">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </span>
+            <input type="text" class="form-control border-0 ps-0" placeholder="Search by title, author, or keyword" aria-label="Search by title, author, or keyword" />
+            <button class="btn btn-brand search-btn border-0" type="button">Search</button>
+        </div>
+
+        <button class="btn advanced-filters-btn d-inline-flex align-items-center justify-content-center gap-2 flex-shrink-0" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
+            </svg>
+            Advanced Filters
+        </button>
+    </div>
+
+    <hr class="search-divider" />
+
+    <div class="row g-3">
+        <div class="col-12 col-md-4">
+            <label class="form-label filter-label" for="categoryFilter">Category</label>
+            <select id="categoryFilter" class="form-select">
+                <option>All Categories</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label filter-label" for="authorFilter">Author</label>
+            <select id="authorFilter" class="form-select">
+                <option>All Authors</option>
+            </select>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label filter-label" for="sortFilter">Sort by</label>
+            <select id="sortFilter" class="form-select">
+                <option>Newest First</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<h2 class="search-results-heading">Search Results</h2>
+
+<div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 book-grid">
+    @for (var i = 0; i < 10; i++)
+    {
+        var isAvailable = i % 5 != 1;
+        <div class="col">
+            <div class="book-card">
+                <div class="book-cover-placeholder"></div>
+                <div class="book-title">1984</div>
+                <div class="book-author">George Orwell</div>
+                <div class="book-status d-flex align-items-center gap-2">
+                    <span class="status-dot @(isAvailable ? "status-available" : "status-unavailable")"></span>
+                    <span class="status-text @(isAvailable ? "text-available" : "text-unavailable")">@(isAvailable ? "Available" : "Unavailable")</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<nav aria-label="Search results pages" class="pagination-wrap">
+    <ul class="pagination custom-pagination justify-content-center mb-0">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">&lsaquo;</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+        <li class="page-item"><a class="page-link" href="#">69</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">&rsaquo;</a>
+        </li>
+    </ul>
+</nav>

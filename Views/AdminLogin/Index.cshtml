@@ -1,0 +1,58 @@
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin-login.css" asp-append-version="true" />
+}
+
+<section class="admin-login-page" aria-labelledby="admin-login-title">
+    <div class="admin-login-image-panel" role="presentation" aria-hidden="true"></div>
+
+    <div class="admin-login-form-panel">
+        <div class="admin-login-branding">
+            <img src="~/images/iborrowLogo.svg" alt="iBorrow logo" class="admin-login-brand-logo" />
+            <div class="admin-login-brand-text">
+                <span class="admin-login-brand-title">iBorrow</span>
+                <span class="admin-login-brand-subtitle">Library System</span>
+            </div>
+        </div>
+
+        <p class="admin-login-helper-text">Sign in to continue to iBorrow Admin Panel</p>
+
+        <form class="admin-login-form" method="post" action="#" autocomplete="on">
+            <div class="admin-form-row">
+                <label for="admin-email" class="admin-label">Email</label>
+                <input
+                    id="admin-email"
+                    name="email"
+                    type="email"
+                    class="admin-input"
+                    required
+                    autofocus />
+            </div>
+
+            <div class="admin-form-row">
+                <label for="admin-password" class="admin-label">Password</label>
+                <input
+                    id="admin-password"
+                    name="password"
+                    type="password"
+                    class="admin-input"
+                    required />
+            </div>
+
+            <div class="admin-form-row">
+                <label for="admin-confirm-password" class="admin-label">Re-enter Password</label>
+                <input
+                    id="admin-confirm-password"
+                    name="confirmPassword"
+                    type="password"
+                    class="admin-input"
+                    required />
+            </div>
+
+            <button type="submit" class="admin-login-button">Login</button>
+        </form>
+    </div>
+</section>

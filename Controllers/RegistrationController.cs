@@ -3,25 +3,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace iBorrow.Controllers
 {
-    public class LoginController : Controller
+    public class RegistrationController : Controller
     {
         [HttpGet]
         public IActionResult Index()
         {
-            return View(new LoginViewModel());
+            return View(new RegistrationViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(LoginViewModel model)
+        public IActionResult Index(RegistrationViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            ViewBag.SuccessMessage = "Login submitted successfully.";
-            return View(new LoginViewModel());
+            ViewBag.SuccessMessage = "Registration submitted successfully.";
+            return View(new RegistrationViewModel());
         }
     }
 }

@@ -1,0 +1,162 @@
+.site-header,
+body > footer {
+	display: none;
+}
+
+.main-body {
+	max-width: none;
+	margin: 0;
+	padding: 0;
+	min-height: 100vh;
+}
+
+.login-page {
+	width: 100vw;
+	min-height: 100vh;
+	margin-left: calc(50% - 50vw);
+	background: #d6ddeb;
+}
+
+.login-shell {
+	min-height: 100vh;
+	display: grid;
+	grid-template-columns: 34% 66%;
+}
+
+.login-form-panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 56px 40px 56px 20px;
+}
+
+.login-branding {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+	margin: 0 0 28px;
+	width: min(100%, 420px);
+}
+
+.login-brand-logo {
+	width: 52px;
+	height: auto;
+}
+
+.login-brand-text {
+	display: flex;
+	flex-direction: column;
+	line-height: 1;
+}
+
+.login-brand-title {
+	color: #1540d8;
+	font-size: 2rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+}
+
+.login-brand-subtitle {
+	color: #202a3f;
+	font-size: 0.65rem;
+	font-weight: 600;
+}
+
+.login-card {
+	width: min(100%, 420px);
+}
+
+.login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.form-field {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.form-label {
+	color: #101010;
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+
+.form-control {
+	height: 58px;
+	border: 1px solid #c8cdd8;
+	border-radius: 999px;
+	background: #f9f9fb;
+	padding: 0 20px;
+	font-size: 1rem;
+}
+
+.form-control:focus {
+	border-color: #3a5cf2;
+	box-shadow: 0 0 0 3px rgba(58, 92, 242, 0.15);
+}
+
+.login-submit {
+	width: 100%;
+	height: 58px;
+	margin-top: 6px;
+	border: 0;
+	border-radius: 999px;
+	background: #1919da;
+	color: #ffffff;
+	font-size: 0.95rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	transition: background-color 0.2s ease;
+}
+
+.login-submit:hover,
+.login-submit:focus {
+	background: #1010be;
+}
+
+.login-signup-link {
+	margin: 0;
+	color: #7a8090;
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-align: center;
+}
+
+.login-signup-link a {
+	color: #1540d8;
+	font-weight: 700;
+}
+
+.login-image-panel {
+	margin: 78px 28px 46px 0;
+	border-radius: 32px;
+	background-image:
+		linear-gradient(rgba(12, 31, 69, 0.18), rgba(12, 31, 69, 0.18)),
+		url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1200&q=80");
+	background-size: cover;
+	background-position: center;
+}
+
+@media (max-width: 1200px) {
+	.login-shell {
+		grid-template-columns: 1fr;
+	}
+
+	.login-form-panel {
+		padding: 32px 18px 24px;
+	}
+
+	.login-branding,
+	.login-card {
+		width: min(100%, 520px);
+	}
+
+	.login-image-panel {
+		min-height: 36vh;
+		margin: 0 18px 24px;
+	}
+}

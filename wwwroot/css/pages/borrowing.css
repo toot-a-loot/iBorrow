@@ -1,0 +1,625 @@
+/* =============================================================
+   borrowing.css
+   Page-specific styles for Views/Borrowing/Index.cshtml
+   iBorrow Library Management System
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   1. Design Tokens
+   ------------------------------------------------------------- */
+:root {
+    --color-primary: #1E40AF;
+    --color-secondary: #2563EB;
+    --color-bg: #F8FAFC;
+    --color-border: #E5E7EB;
+    --color-text: #111827;
+    --color-text-muted: #6B7280;
+    --color-available: #22C55E;
+    --color-unavailable: #EF4444;
+    --color-white: #FFFFFF;
+    --color-overlay: rgba(0, 0, 0, 0.52);
+
+    --font-base: 'Poppins', sans-serif;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+
+    --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --shadow-card-hover: 0 10px 28px rgba(0, 0, 0, 0.16);
+    --shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.10);
+
+    --transition-base: all 0.22s ease;
+}
+
+/* -------------------------------------------------------------
+   2. Page Base
+   ------------------------------------------------------------- */
+body {
+    font-family: var(--font-base);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+/* -------------------------------------------------------------
+   3. Hero Section
+   ------------------------------------------------------------- */
+.borrow-hero {
+    position: relative;
+    width: 100%;
+    min-height: 270px;
+    background-image: url('/images/bookshelf-hero.jpg');
+    background-size: cover;
+    background-position: center 40%;
+    background-color: #1a1008;
+    /* fallback when image is absent */
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 70px;
+    /* extra space so content won't be hidden by floating panel */
+    overflow: hidden;
+}
+
+.borrow-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--color-overlay);
+    z-index: 0;
+}
+
+.borrow-hero__content {
+    position: relative;
+    z-index: 1;
+    padding: 0 1.75rem;
+}
+
+.borrow-hero__heading {
+    font-family: var(--font-base);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 0.35rem;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+.borrow-hero__subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+
+/* -------------------------------------------------------------
+   4. Search Section — Floating Panel
+   ------------------------------------------------------------- */
+.search-section {
+    margin-top: -48px;
+    /* pulls panel up over the hero */
+    position: relative;
+    z-index: 10;
+    padding-bottom: 0.5rem;
+}
+
+.search-panel {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-panel);
+    padding: 1.5rem 1.75rem 1.25rem;
+    border: 1px solid var(--color-border);
+}
+
+/* --- Primary Row (input + buttons) --- */
+.search-panel__row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.search-panel__row--primary {
+    flex-wrap: nowrap;
+}
+
+/* Search input wrapper */
+.search-panel__input-wrapper {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.search-panel__icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.search-panel__input {
+    width: 100%;
+    height: 46px;
+    padding: 0 1rem 0 2.6rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-base);
+    font-size: 0.92rem;
+    color: var(--color-text);
+    background: var(--color-bg);
+    outline: none;
+    transition: var(--transition-base);
+    box-sizing: border-box;
+}
+
+.search-panel__input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.search-panel__input:focus {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    background: var(--color-white);
+}
+
+/* Buttons wrapper */
+.search-panel__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+}
+
+/* Search button */
+.btn-search {
+    height: 46px;
+    padding: 0 1.6rem;
+    background: var(--color-secondary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-base);
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition-base);
+    letter-spacing: 0.02em;
+}
+
+.btn-search:hover,
+.btn-search:focus-visible {
+    background: var(--color-primary);
+    transform: scale(1.03);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    outline: none;
+}
+
+.btn-search:active {
+    transform: scale(0.98);
+}
+
+/* Advanced Filters button */
+.btn-filters {
+    height: 46px;
+    padding: 0 1.2rem;
+    background: transparent;
+    color: var(--color-secondary);
+    border: 1.5px solid var(--color-secondary);
+    border-radius: var(--radius-md);
+    font-family: var(--font-base);
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: var(--transition-base);
+}
+
+.btn-filters:hover,
+.btn-filters:focus-visible {
+    background: rgba(37, 99, 235, 0.07);
+    transform: scale(1.03);
+    outline: none;
+}
+
+.btn-filters:active {
+    transform: scale(0.98);
+}
+
+/* Divider */
+.search-panel__divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 1.1rem 0 1rem;
+}
+
+/* --- Filters Row (dropdowns) --- */
+.search-panel__row--filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+/* Filter group */
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1 1 180px;
+    min-width: 150px;
+}
+
+.filter-group__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.filter-group__select {
+    height: 40px;
+    padding: 0 2rem 0 0.85rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-base);
+    font-size: 0.88rem;
+    color: var(--color-text);
+    background-color: var(--color-white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 16 16'%3E%3Cpath fill='%236B7280' d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    transition: var(--transition-base);
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.filter-group__select:focus {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* -------------------------------------------------------------
+   5. Results Section
+   ------------------------------------------------------------- */
+.results-section {
+    padding: 2.5rem 0 3.5rem;
+}
+
+.results-section__heading {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.3px;
+}
+
+/* -------------------------------------------------------------
+   6. Book Grid
+   ------------------------------------------------------------- */
+.book-grid {
+    display: grid;
+    /* Desktop: 5 columns */
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+/* Tablet: 3 columns */
+@media (max-width: 1024px) {
+    .book-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Large mobile: 2 columns */
+@media (max-width: 640px) {
+    .book-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+/* Small phones: 1 column */
+@media (max-width: 400px) {
+    .book-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* -------------------------------------------------------------
+   7. Book Card
+   ------------------------------------------------------------- */
+.book-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    outline: none;
+}
+
+.book-card:hover,
+.book-card:focus-visible {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-card-hover);
+    border-color: transparent;
+}
+
+/* Book cover wrapper */
+.book-card__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.book-card__cover-wrapper {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    background: #dde1e7;
+}
+
+.book-card__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-card__cover {
+    transform: scale(1.04);
+}
+
+/* Card body */
+.book-card__body {
+    padding: 0.75rem 0.9rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.book-card__title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book-card__author {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Availability badges */
+.book-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem 0.2rem 0.5rem;
+    margin-top: 0.35rem;
+    width: fit-content;
+    letter-spacing: 0.02em;
+}
+
+.book-card__badge--available {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.book-card__badge--unavailable {
+    color: #b91c1c;
+    background: #fee2e2;
+}
+
+.book-card__badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.book-card__badge--available .book-card__badge-dot {
+    background: var(--color-available);
+}
+
+.book-card__badge--unavailable .book-card__badge-dot {
+    background: var(--color-unavailable);
+}
+
+/* -------------------------------------------------------------
+   8. Pagination
+   ------------------------------------------------------------- */
+.pagination-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.pagination-list {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-list__item {
+    display: flex;
+}
+
+.pagination-list__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.6rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-base);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    background: var(--color-white);
+    border: 1.5px solid var(--color-border);
+    text-decoration: none;
+    transition: var(--transition-base);
+    cursor: pointer;
+    user-select: none;
+}
+
+.pagination-list__link:hover {
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.pagination-list__link:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+}
+
+/* Active page */
+.pagination-list__link--active {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: var(--color-white);
+    font-weight: 700;
+    pointer-events: none;
+}
+
+/* Prev / Next nav arrows */
+.pagination-list__link--prev,
+.pagination-list__link--next {
+    color: var(--color-text-muted);
+}
+
+.pagination-list__link--prev:hover,
+.pagination-list__link--next:hover {
+    color: var(--color-secondary);
+}
+
+/* Ellipsis */
+.pagination-list__item--ellipsis {
+    pointer-events: none;
+}
+
+.pagination-list__ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    letter-spacing: 2px;
+}
+
+/* -------------------------------------------------------------
+   9. Responsive Adjustments
+   ------------------------------------------------------------- */
+
+/* Tablet */
+@media (max-width: 992px) {
+    .search-panel__row--primary {
+        flex-wrap: wrap;
+    }
+
+    .search-panel__input-wrapper {
+        flex: 1 1 100%;
+    }
+
+    .search-panel__actions {
+        flex: 1 1 100%;
+        justify-content: stretch;
+    }
+
+    .btn-search,
+    .btn-filters {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .search-panel__row--filters {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        flex: 1 1 100%;
+        min-width: unset;
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .borrow-hero {
+        min-height: 220px;
+        padding-bottom: 56px;
+    }
+
+    .borrow-hero__heading {
+        font-size: 1.85rem;
+    }
+
+    .search-section {
+        margin-top: -40px;
+    }
+
+    .search-panel {
+        padding: 1.1rem 1rem 1rem;
+    }
+
+    .btn-search,
+    .btn-filters {
+        height: 42px;
+        font-size: 0.85rem;
+    }
+
+    .search-panel__input {
+        height: 42px;
+    }
+
+    .results-section {
+        padding: 2rem 0 2.5rem;
+    }
+
+    .results-section__heading {
+        font-size: 1.2rem;
+    }
+
+    .pagination-list__link {
+        min-width: 34px;
+        height: 34px;
+        font-size: 0.8rem;
+    }
+}

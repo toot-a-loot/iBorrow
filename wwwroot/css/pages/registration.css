@@ -148,9 +148,13 @@ body > footer {
 
   .registration-form-panel {
     padding: 32px 18px 24px;
+    align-items: center;
   }
 
-  .registration-branding,
+  .registration-branding {
+    width: min(100%, 520px);
+  }
+
   .registration-card {
     width: min(100%, 520px);
   }

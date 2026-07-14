@@ -20,7 +20,7 @@ namespace iBorrow.Controllers
                 return View(model);
             }
 
-            ViewBag.SuccessMessage = "Registration submitted successfully.";
+            ViewBag.SuccessMessage = "Registration details submitted successfully.";
             return View(new RegistrationViewModel());
         }
     }

@@ -1,5 +1,404 @@
-@{ViewData["Title"] = "Borrowing";}
+@{
+    ViewData["Title"] = "Borrowing";
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/borrowing.css" asp-append-version="true" />
 }
+
+<!-- ===================================================
+     Hero Section
+     =================================================== -->
+<section class="borrow-hero" aria-label="Borrow Books Hero">
+    <div class="borrow-hero__overlay"></div>
+    <div class="borrow-hero__content">
+        <h1 class="borrow-hero__heading">Borrow Books.</h1>
+        <p class="borrow-hero__subtitle">Discover available books</p>
+    </div>
+</section>
+
+<!-- ===================================================
+     Search Section
+     (Floats over the hero via negative margin)
+     =================================================== -->
+<section class="search-section" aria-label="Book Search">
+    <div class="container">
+        <div class="search-panel">
+
+            <!-- Search Form -->
+            <form method="get" action="" role="search" aria-label="Search books">
+
+                <!-- First Row: Search Input + Buttons -->
+                <div class="search-panel__row search-panel__row--primary">
+                    <div class="search-panel__input-wrapper">
+                        <span class="search-panel__icon" aria-hidden="true">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="search" id="searchInput" name="search" class="search-panel__input"
+                               placeholder="Search by title, author, or keyword"
+                               aria-label="Search by title, author, or keyword" autocomplete="off" />
+                    </div>
+
+                    <div class="search-panel__actions">
+                        <button type="submit" id="searchBtn" class="btn-search" aria-label="Search books">
+                            Search
+                        </button>
+
+                        <button type="button" id="advancedFiltersBtn" class="btn-filters"
+                                aria-label="Show advanced filters" aria-expanded="false" aria-controls="advancedFilters">
+                            <i class="bi bi-sliders" aria-hidden="true"></i>
+                            Advanced Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <hr class="search-panel__divider" />
+
+                <!-- Second Row: Dropdown Filters -->
+                <!-- Future: bind to Model.CategoryId, Model.AuthorId, Model.SortBy -->
+                <div class="search-panel__row search-panel__row--filters" id="advancedFilters">
+
+                    <!-- Category Dropdown -->
+                    <div class="filter-group">
+                        <label for="categorySelect" class="filter-group__label">Category</label>
+                        <select id="categorySelect" name="categoryId" class="filter-group__select"
+                                aria-label="Filter by category">
+                            <!-- Future: <option value="">All Categories</option> -->
+                            @* <!-- Future: @foreach(var cat in Model.Categories) {
+                            <option value="@cat.Id">@cat.Name</option>
+                            }
+ --> *@
+                            <option value="">All Categories</option>
+                            <option value="1">Fiction</option>
+                            <option value="2">Non-Fiction</option>
+                            <option value="3">Science</option>
+                            <option value="4">History</option>
+                            <option value="5">Technology</option>
+                            <option value="6">Biography</option>
+                            <option value="7">Philosophy</option>
+                        </select>
+                    </div>
+
+                    <!-- Author Dropdown -->
+                    <div class="filter-group">
+                        <label for="authorSelect" class="filter-group__label">Author</label>
+                        <select id="authorSelect" name="authorId" class="filter-group__select"
+                                aria-label="Filter by author">
+                            <!-- Future: <option value="">All Authors</option> -->
+                            @* <!-- Future: @foreach(var author in Model.Authors) {
+                            <option value="@author.Id">@author.Name</option>
+                            } --> *@
+                            <option value="">All Authors</option>
+                            <option value="1">George Orwell</option>
+                            <option value="2">J.K. Rowling</option>
+                            <option value="3">Haruki Murakami</option>
+                            <option value="4">Stephen King</option>
+                            <option value="5">Agatha Christie</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort By Dropdown -->
+                    <div class="filter-group">
+                        <label for="sortBySelect" class="filter-group__label">Sort by</label>
+                        <select id="sortBySelect" name="sortBy" class="filter-group__select"
+                                aria-label="Sort results by">
+                            <!-- Future: selected based on Model.SortBy -->
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="az">A–Z</option>
+                            <option value="za">Z–A</option>
+                            <option value="available">Available First</option>
+                        </select>
+                    </div>
+
+                </div>
+                <!-- /Second Row -->
+
+            </form>
+            <!-- /Search Form -->
+
+        </div>
+        <!-- /search-panel -->
+    </div>
+</section>
+<!-- /Search Section -->
+
+<!-- ===================================================
+     Search Results Section
+     =================================================== -->
+<section class="results-section" aria-label="Search Results">
+    <div class="container">
+
+        <!-- Results Heading -->
+        <h2 class="results-section__heading">Search Results</h2>
+
+        <!-- Book Grid -->
+        @* <!-- Future: @foreach(var book in Model.Books) { --> *@
+        <div class="book-grid" role="list" aria-label="Available books">
+
+            @* <!--
+                Book Card — Reusable Component
+                Future replacement:
+                  Title → @book.Title
+                  Author → @book.Author
+                  CoverImage → @book.CoverImage
+                  IsAvailable→ @book.IsAvailable
+                  Category → @book.Category
+                  Id → @book.Id
+            --> *@
+
+            @*<!-- Book Card 1 — Available -->*@
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Available
+                    </span>
+                </div>
+            </article>
+
+            @* <!-- Book Card 2 — Unavailable --> *@
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Unavailable">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--unavailable" aria-label="Status: Unavailable">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Unavailable
+                    </span>
+                </div>
+            </article>
+
+            @* <!-- Book Card 3 — Available --> *@
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Available
+                    </span>
+                </div>
+            </article>
+
+            @* <!-- Book Card 4 — Unavailable --> *@
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Unavailable">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--unavailable" aria-label="Status: Unavailable">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Unavailable
+                    </span>
+                </div>
+            </article>
+
+            @* <!-- Book Card 5 — Available --> *@
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Available
+                    </span>
+                </div>
+            </article>
+
+            <!-- Book Card 6 — Available -->
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Available
+                    </span>
+                </div>
+            </article>
+
+            <!-- Book Card 7 — Unavailable -->
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Unavailable">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--unavailable" aria-label="Status: Unavailable">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Unavailable
+                    </span>
+                </div>
+            </article>
+
+            <!-- Book Card 8 — Available -->
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Available
+                    </span>
+                </div>
+            </article>
+
+            <!-- Book Card 9 — Unavailable -->
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Unavailable">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--unavailable" aria-label="Status: Unavailable">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Unavailable
+                    </span>
+                </div>
+            </article>
+
+            <!-- Book Card 10 — Available -->
+            <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+                <a href="#" class="book-card__link" tabindex="-1" aria-hidden="true">
+                    <div class="book-card__cover-wrapper">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984"
+                             class="book-card__cover" loading="lazy" />
+                    </div>
+                </a>
+                <div class="book-card__body">
+                    <h3 class="book-card__title">1984</h3>
+                    <p class="book-card__author">George Orwell</p>
+                    <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                        <span class="book-card__badge-dot" aria-hidden="true"></span>
+                        Available
+                    </span>
+                </div>
+            </article>
+
+        </div>
+        <!-- /book-grid -->
+        <!-- Future: } (end foreach) -->
+
+        <!-- ===============================================
+             Pagination
+             Future: generate dynamically from Model.CurrentPage / Model.TotalPages
+             =============================================== -->
+        <nav class="pagination-nav" aria-label="Book results pagination">
+            <ul class="pagination-list">
+
+                <!-- Previous Button -->
+                <!-- Future: disabled when Model.CurrentPage == 1 -->
+                <li class="pagination-list__item">
+                    <a href="#" class="pagination-list__link pagination-list__link--prev"
+                       aria-label="Go to previous page" rel="prev">
+                        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                    </a>
+                </li>
+
+                <!-- Page 1 — Active (current page) -->
+                @* <!-- Future: class="pagination-list__link pagination-list__link--active" when @page ==
+                Model.CurrentPage --> *@
+                <li class="pagination-list__item">
+                    <a href="#" class="pagination-list__link pagination-list__link--active"
+                       aria-label="Page 1, current page" aria-current="page">
+                        1
+                    </a>
+                </li>
+
+                <!-- Page 2 -->
+                <li class="pagination-list__item">
+                    <a href="#" class="pagination-list__link" aria-label="Go to page 2">
+                        2
+                    </a>
+                </li>
+
+                <!-- Page 3 -->
+                <li class="pagination-list__item">
+                    <a href="#" class="pagination-list__link" aria-label="Go to page 3">
+                        3
+                    </a>
+                </li>
+
+                <!-- Ellipsis -->
+                <!-- Future: render when total pages exceed visible window -->
+                <li class="pagination-list__item pagination-list__item--ellipsis" aria-hidden="true">
+                    <span class="pagination-list__ellipsis">...</span>
+                </li>
+
+                <!-- Last Page -->
+                @* <!-- Future: @Model.TotalPages --> *@
+                <li class="pagination-list__item">
+                    <a href="#" class="pagination-list__link" aria-label="Go to last page, page 69">
+                        69
+                    </a>
+                </li>
+
+                <!-- Next Button -->
+                <!-- Future: disabled when Model.CurrentPage == Model.TotalPages -->
+                <li class="pagination-list__item">
+                    <a href="#" class="pagination-list__link pagination-list__link--next" aria-label="Go to next page"
+                       rel="next">
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /Pagination -->
+
+    </div>
+</section>
+<!-- /Search Results Section -->

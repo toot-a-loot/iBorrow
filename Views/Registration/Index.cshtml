@@ -1,0 +1,68 @@
+@model iBorrow.Models.RegistrationViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/registration.css" asp-append-version="true" />
+}
+
+<section class="registration-page">
+    <div class="registration-shell">
+        <div class="registration-form-panel">
+            <div class="registration-branding">
+                <img src="~/images/iborrowLogo.svg" alt="iBorrow logo" class="registration-brand-logo" />
+                <div class="registration-brand-text">
+                    <span class="registration-brand-title">iBorrow</span>
+                    <span class="registration-brand-subtitle">Library System</span>
+                </div>
+            </div>
+
+            <div class="registration-card">
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
+
+                <form asp-action="Index" asp-controller="Registration" method="post" class="registration-form" novalidate>
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+
+                    <div class="form-field">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="name@school.edu" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-field">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" placeholder="Minimum 8 characters" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-field">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Repeat your password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="registration-submit">Create Account</button>
+
+                    <p class="registration-signin-link">
+                        Already have an account?
+                        <a asp-controller="Login" asp-action="Index">Sign in</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <div class="registration-image-panel" role="presentation" aria-hidden="true"></div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

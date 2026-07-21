@@ -4,5 +4,237 @@
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
 }
 
-<h1>BORROW BOOKS</h1>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+<!-- ===================================================
+     Hero Section
+     =================================================== -->
+<section class="home-hero" aria-label="Borrow Books Hero">
+    <div class="home-hero__overlay"></div>
+
+    <span class="home-hero__badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        Welcome to iBorrow
+    </span>
+
+    <div class="home-hero__content">
+        <h1 class="home-hero__heading">Borrow Books.</h1>
+        <p class="home-hero__subtitle">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat.
+        </p>
+    </div>
+</section>
+
+<!-- ===================================================
+     Quick Actions
+     (Floats over the hero via negative margin)
+     =================================================== -->
+<section class="home-quick-actions-section" aria-label="Quick Actions">
+    <div class="home-quick-actions">
+
+        <a class="home-quick-actions__item" asp-area="" asp-controller="Library" asp-action="Index">
+            <span class="home-quick-actions__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+            </span>
+            <span class="home-quick-actions__text">
+                <span class="home-quick-actions__title">Browse Books</span>
+                <span class="home-quick-actions__subtitle">Explore our full catalog</span>
+            </span>
+        </a>
+
+        <a class="home-quick-actions__item" asp-area="" asp-controller="Borrowing" asp-action="Index">
+            <span class="home-quick-actions__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </span>
+            <span class="home-quick-actions__text">
+                <span class="home-quick-actions__title">Borrow Book</span>
+                <span class="home-quick-actions__subtitle">Reserve and check out fast</span>
+            </span>
+        </a>
+
+        <a class="home-quick-actions__item" asp-area="" asp-controller="Borrowing" asp-action="Index">
+            <span class="home-quick-actions__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+            </span>
+            <span class="home-quick-actions__text">
+                <span class="home-quick-actions__title">View Reminder</span>
+                <span class="home-quick-actions__subtitle">Return the book on time</span>
+            </span>
+        </a>
+
+        <a class="home-quick-actions__item" asp-area="" asp-controller="Borrowing" asp-action="Index">
+            <span class="home-quick-actions__icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="20" x2="12" y2="10"></line>
+                    <line x1="18" y1="20" x2="18" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="16"></line>
+                </svg>
+            </span>
+            <span class="home-quick-actions__text">
+                <span class="home-quick-actions__title">Track Borrowings</span>
+                <span class="home-quick-actions__subtitle">View of books you've borrowed</span>
+            </span>
+        </a>
+
+    </div>
+</section>
+
+<!-- ===================================================
+     Available Books Section
+     =================================================== -->
+<section class="home-section" aria-label="Available Books">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Available Books</h2>
+        <a class="home-section__link" asp-area="" asp-controller="Library" asp-action="Index">
+            View All Books
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </a>
+    </div>
+
+    <div class="home-book-grid" role="list" aria-label="Available books">
+
+        <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+            <div class="book-card__cover-wrapper">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
+            </div>
+            <div class="book-card__body">
+                <h3 class="book-card__title">1984</h3>
+                <p class="book-card__author">George Orwell</p>
+                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                    <span class="book-card__badge-dot" aria-hidden="true"></span>
+                    Available
+                </span>
+            </div>
+        </article>
+
+        <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Unavailable">
+            <div class="book-card__cover-wrapper">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
+            </div>
+            <div class="book-card__body">
+                <h3 class="book-card__title">1984</h3>
+                <p class="book-card__author">George Orwell</p>
+                <span class="book-card__badge book-card__badge--unavailable" aria-label="Status: Unavailable">
+                    <span class="book-card__badge-dot" aria-hidden="true"></span>
+                    Unavailable
+                </span>
+            </div>
+        </article>
+
+        <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+            <div class="book-card__cover-wrapper">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
+            </div>
+            <div class="book-card__body">
+                <h3 class="book-card__title">1984</h3>
+                <p class="book-card__author">George Orwell</p>
+                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                    <span class="book-card__badge-dot" aria-hidden="true"></span>
+                    Available
+                </span>
+            </div>
+        </article>
+
+        <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+            <div class="book-card__cover-wrapper">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
+            </div>
+            <div class="book-card__body">
+                <h3 class="book-card__title">1984</h3>
+                <p class="book-card__author">George Orwell</p>
+                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                    <span class="book-card__badge-dot" aria-hidden="true"></span>
+                    Available
+                </span>
+            </div>
+        </article>
+
+        <article class="book-card" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available">
+            <div class="book-card__cover-wrapper">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
+            </div>
+            <div class="book-card__body">
+                <h3 class="book-card__title">1984</h3>
+                <p class="book-card__author">George Orwell</p>
+                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
+                    <span class="book-card__badge-dot" aria-hidden="true"></span>
+                    Available
+                </span>
+            </div>
+        </article>
+
+    </div>
+</section>
+
+<!-- ===================================================
+     Currently Borrowed Section
+     =================================================== -->
+<section class="home-section" aria-label="Currently Borrowed">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Currently Borrowed</h2>
+        <a class="home-section__link" asp-area="" asp-controller="Borrowing" asp-action="Index">
+            View All Borrowing
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </a>
+    </div>
+
+    <div class="home-borrowed-panel">
+        <div class="home-borrowed-panel__summary">
+            <span class="home-borrowed-panel__icon" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+            </span>
+            <span class="home-borrowed-panel__text">
+                <span class="home-borrowed-panel__title">You have 2 books borrowed.</span>
+                <span class="home-borrowed-panel__subtitle">Keep on Learning!</span>
+            </span>
+        </div>
+
+        <div class="home-borrowed-panel__divider" aria-hidden="true"></div>
+
+        <ul class="home-borrowed-list">
+            <li class="home-borrowed-list__item">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="home-borrowed-list__cover" loading="lazy" />
+                <span class="home-borrowed-list__text">
+                    <span class="home-borrowed-list__title">1984</span>
+                    <span class="home-borrowed-list__author">George Orwell</span>
+                </span>
+                <span class="home-borrowed-list__due">
+                    Due:
+                    <span class="home-borrowed-list__badge home-borrowed-list__badge--overdue">Overdue</span>
+                </span>
+            </li>
+
+            <li class="home-borrowed-list__item">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="home-borrowed-list__cover" loading="lazy" />
+                <span class="home-borrowed-list__text">
+                    <span class="home-borrowed-list__title">1984</span>
+                    <span class="home-borrowed-list__author">George Orwell</span>
+                </span>
+                <span class="home-borrowed-list__due">
+                    Due:
+                    <span class="home-borrowed-list__badge home-borrowed-list__badge--soon">Due Soon</span>
+                </span>
+            </li>
+        </ul>
+    </div>
+</section>

@@ -46,7 +46,10 @@ body {
    ------------------------------------------------------------- */
 .borrow-hero {
     position: relative;
-    width: 100%;
+    left: 50%;
+    width: 100vw;
+    margin-left: -50vw;
+    margin-top: calc(-1 * var(--spacing-lg));
     min-height: 270px;
     background-image: url('/images/bookshelf-hero.jpg');
     background-size: cover;
@@ -58,6 +61,7 @@ body {
     padding-bottom: 70px;
     /* extra space so content won't be hidden by floating panel */
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .borrow-hero__overlay {

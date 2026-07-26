@@ -56,10 +56,6 @@ body {
 
     height: 50vh;
     min-height: 320px;
-    background-image: url('/images/heroImage.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
     background-color: #1a1008;
     display: flex;
     align-items: flex-end;
@@ -68,11 +64,75 @@ body {
     box-sizing: border-box;
 }
 
+/* hero page slider */
+
+.home-hero__slider {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.home-hero__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translateX(-100%);
+    animation: home-hero-slide 16s infinite linear;
+}
+
+.home-hero__slide:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.home-hero__slide:nth-child(2) {
+    animation-delay: 4s;
+}
+
+.home-hero__slide:nth-child(3) {
+    animation-delay: 8s;
+}
+
+.home-hero__slide:nth-child(4) {
+    animation-delay: 12s;
+}
+
+@keyframes home-hero-slide {
+    0% {
+        transform: translateX(-100%);
+    }
+    6.25% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(0);
+    }
+    31.25% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-hero__slide {
+        animation: none;
+        transform: translateX(100%);
+    }
+
+    .home-hero__slide:first-child {
+        transform: none;
+    }
+}
+
 .home-hero__overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, var(--color-overlay) 100%);
-    z-index: 0;
+    z-index: 1;
 }
 
 .home-hero__badge {
@@ -132,6 +192,7 @@ body {
     border: 1px solid var(--color-border);
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    overflow: hidden;
 }
 
 .home-quick-actions__item {

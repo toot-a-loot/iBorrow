@@ -3,12 +3,15 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/pages/borrowing.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/borrowing/tokens.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/borrowing/hero.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/borrowing/search-panel.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/borrowing/results.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/borrowing/pagination.css" asp-append-version="true" />
 }
 
-<!-- ===================================================
-     Hero Section
-     =================================================== -->
+@* hero *@
+
 <section class="borrow-hero" aria-label="Borrow Books Hero">
     <div class="borrow-hero__overlay"></div>
     <div class="borrow-hero__content">
@@ -17,10 +20,8 @@
     </div>
 </section>
 
-<!-- ===================================================
-     Search Section
-     (Floats over the hero via negative margin)
-     =================================================== -->
+@* Search *@
+
 <section class="search-section" aria-label="Book Search">
     <div class="search-panel">
 
@@ -63,11 +64,6 @@
                         <label for="categorySelect" class="filter-group__label">Category</label>
                         <select id="categorySelect" name="categoryId" class="filter-group__select"
                                 aria-label="Filter by category">
-                            <!-- Future: <option value="">All Categories</option> -->
-                            @* <!-- Future: @foreach(var cat in Model.Categories) {
-                            <option value="@cat.Id">@cat.Name</option>
-                            }
- --> *@
                             <option value="">All Categories</option>
                             <option value="1">Fiction</option>
                             <option value="2">Non-Fiction</option>

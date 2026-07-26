@@ -1,0 +1,60 @@
+.borrow-hero {
+    position: relative;
+    left: 50%;
+    width: 100vw;
+    margin-left: -50vw;
+    margin-top: calc(-1 * var(--spacing-lg));
+    min-height: 270px;
+    background-image: url('/images/bookshelf-hero.jpg');
+    background-size: cover;
+    background-position: center 40%;
+    background-color: #1a1008;
+    /* fallback when image is absent */
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 70px;
+    /* extra space so content won't be hidden by floating panel */
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.borrow-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--borrow-color-overlay);
+    z-index: 0;
+}
+
+.borrow-hero__content {
+    position: relative;
+    z-index: 1;
+    padding: 0 1.75rem;
+}
+
+.borrow-hero__heading {
+    font-family: var(--font-base);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 0.35rem;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+.borrow-hero__subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+
+@media (max-width: 576px) {
+    .borrow-hero {
+        min-height: 220px;
+        padding-bottom: 56px;
+    }
+
+    .borrow-hero__heading {
+        font-size: 1.85rem;
+    }
+}

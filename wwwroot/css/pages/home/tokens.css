@@ -1,0 +1,22 @@
+:root {
+    --home-color-primary: #1E40AF;
+    --home-color-secondary: #2563EB;
+    --home-color-bg: #F8FAFC;
+    --home-color-border: #E5E7EB;
+    --home-color-text: #111827;
+    --home-color-text-muted: #6B7280;
+    --home-color-available: #22C55E;
+    --home-color-unavailable: #EF4444;
+    --home-color-due-soon: #F59E0B;
+    --home-color-overlay: rgba(10, 10, 40, 0.55);
+
+    --home-radius-sm: 6px;
+    --home-radius-md: 12px;
+    --home-radius-lg: 18px;
+
+    --home-shadow-card: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --home-shadow-card-hover: 0 10px 28px rgba(0, 0, 0, 0.16);
+    --home-shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.10);
+
+    --home-transition-base: all 0.22s ease;
+}

@@ -1,0 +1,95 @@
+.pagination-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.pagination-list {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pagination-list__item {
+    display: flex;
+}
+
+.pagination-list__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.6rem;
+    border-radius: var(--borrow-radius-sm);
+    font-family: var(--font-base);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--borrow-color-text);
+    background: var(--color-white);
+    border: 1.5px solid var(--borrow-color-border);
+    text-decoration: none;
+    transition: var(--borrow-transition-base);
+    cursor: pointer;
+    user-select: none;
+}
+
+.pagination-list__link:hover {
+    border-color: var(--borrow-color-secondary);
+    color: var(--borrow-color-secondary);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.pagination-list__link:focus-visible {
+    outline: 2px solid var(--borrow-color-secondary);
+    outline-offset: 2px;
+}
+
+/* Active page */
+.pagination-list__link--active {
+    background: var(--borrow-color-secondary);
+    border-color: var(--borrow-color-secondary);
+    color: var(--color-white);
+    font-weight: 700;
+    pointer-events: none;
+}
+
+/* Prev / Next nav arrows */
+.pagination-list__link--prev,
+.pagination-list__link--next {
+    color: var(--borrow-color-text-muted);
+}
+
+.pagination-list__link--prev:hover,
+.pagination-list__link--next:hover {
+    color: var(--borrow-color-secondary);
+}
+
+/* Ellipsis */
+.pagination-list__item--ellipsis {
+    pointer-events: none;
+}
+
+.pagination-list__ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    color: var(--borrow-color-text-muted);
+    font-size: 0.875rem;
+    letter-spacing: 2px;
+}
+
+@media (max-width: 576px) {
+    .pagination-list__link {
+        min-width: 34px;
+        height: 34px;
+        font-size: 0.8rem;
+    }
+}

@@ -3,6 +3,11 @@ body {
   margin: 0;
   padding: 0;
   background: var(--color-white);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-base);
 }
 
 a {

@@ -1,0 +1,41 @@
+.hero-banner {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  margin-top: calc(-1 * var(--spacing-lg));
+  min-height: 20vh;
+  padding: var(--spacing-xxl) var(--spacing-xl);
+  border-radius: 0;
+  overflow: hidden;
+  background: #c2c2c2;
+}
+
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 1;
+  color: var(--color-white);
+}
+
+.hero-title {
+  font-weight: 800;
+  font-size: 2.75rem;
+  margin-bottom: var(--spacing-xs);
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}

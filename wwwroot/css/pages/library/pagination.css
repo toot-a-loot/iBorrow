@@ -1,0 +1,27 @@
+.pagination-wrap {
+  margin: var(--spacing-xxl) 0;
+}
+
+.custom-pagination .page-link {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin: 0 4px;
+  color: var(--color-black);
+  border: 1px solid var(--color-border);
+}
+
+.custom-pagination .page-item.active .page-link {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.custom-pagination .page-item.disabled .page-link {
+  border: none;
+  background: transparent;
+  color: var(--color-gray);
+}

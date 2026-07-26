@@ -1,3 +1,7 @@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
 <nav class="navbar navbar-expand-md site-header bg-white">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
@@ -14,9 +18,15 @@
 
         <div class="collapse navbar-collapse" id="siteNav">
             <ul class="navbar-nav mx-md-auto gap-md-4 mt-3 mt-md-0">
-                <li class="nav-item"><a class="nav-link brand-nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="nav-item"><a class="nav-link brand-nav-link" asp-area="" asp-controller="Library" asp-action="Index">Library</a></li>
-                <li class="nav-item"><a class="nav-link brand-nav-link" asp-area="" asp-controller="Borrowing" asp-action="Index">Borrowing</a></li>
+                <li class="nav-item">
+                    <a class="nav-link brand-nav-link @(currentController == "Home" ? "active" : "")" aria-current="@(currentController == "Home" ? "page" : null)" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link brand-nav-link @(currentController == "Library" ? "active" : "")" aria-current="@(currentController == "Library" ? "page" : null)" asp-area="" asp-controller="Library" asp-action="Index">Library</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link brand-nav-link @(currentController == "Borrowing" ? "active" : "")" aria-current="@(currentController == "Borrowing" ? "page" : null)" asp-area="" asp-controller="Borrowing" asp-action="Index">Borrowing</a>
+                </li>
             </ul>
 
             <a class="btn btn-brand rounded-pill d-inline-flex align-items-center gap-2 mt-3 mt-md-0" asp-area="" asp-controller="Login" asp-action="Index">

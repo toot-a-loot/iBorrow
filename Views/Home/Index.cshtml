@@ -4,10 +4,14 @@
     <link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
 }
 
-<!-- ===================================================
-     Hero Section
-     =================================================== -->
+@* hero *@
 <section class="home-hero" aria-label="Borrow Books Hero">
+    <div class="home-hero__slider" aria-hidden="true">
+        <img class="home-hero__slide" src="~/images/heroImage_01.png" asp-append-version="true" alt="3 students assessing the book" />
+        <img class="home-hero__slide" src="~/images/heroImage_02.png" asp-append-version="true" alt="4 students reading books" />
+        <img class="home-hero__slide" src="~/images/heroImage_03.png" asp-append-version="true" alt="Student reading a book" />
+        <img class="home-hero__slide" src="~/images/heroImage_04.png" asp-append-version="true" alt="Library books showcase" />
+    </div>
     <div class="home-hero__overlay"></div>
 
     <span class="home-hero__badge">
@@ -21,17 +25,16 @@
     <div class="home-hero__content">
         <h1 class="home-hero__heading">Borrow Books.</h1>
         <p class="home-hero__subtitle">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-            commodo consequat.
+            iBorrow is a digital library management system exclusively for iACADEMY students.
+            Easily browse available books, borrow and reserve books,
+            and manage due dates all through a simple and convenient platform designed to make
+            accessing library resources faster and more efficient.
         </p>
     </div>
 </section>
 
-<!-- ===================================================
-     Quick Actions
-     (Floats over the hero via negative margin)
-     =================================================== -->
+@* quick nav *@
+
 <section class="home-quick-actions-section" aria-label="Quick Actions">
     <div class="home-quick-actions">
 
@@ -90,9 +93,8 @@
     </div>
 </section>
 
-<!-- ===================================================
-     Available Books Section
-     =================================================== -->
+@* available books *@
+
 <section class="home-section" aria-label="Available Books">
     <div class="home-section__header">
         <h2 class="home-section__title">Available Books</h2>
@@ -180,9 +182,7 @@
     </div>
 </section>
 
-<!-- ===================================================
-     Currently Borrowed Section
-     =================================================== -->
+@* Currently borrowed *@
 <section class="home-section" aria-label="Currently Borrowed">
     <div class="home-section__header">
         <h2 class="home-section__title">Currently Borrowed</h2>
@@ -195,6 +195,7 @@
         </a>
     </div>
 
+@* borrow status *@
     <div class="home-borrowed-panel">
         <div class="home-borrowed-panel__summary">
             <span class="home-borrowed-panel__icon" aria-hidden="true">

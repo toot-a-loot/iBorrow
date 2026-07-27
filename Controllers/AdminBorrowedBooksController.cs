@@ -1,0 +1,25 @@
+using iBorrow.Models;
+using iBorrow.Services;
+using Microsoft.AspNetCore.Mvc;
+
+namespace iBorrow.Controllers;
+
+public class AdminBorrowedBooksController(CirculationStore store) : Controller
+{
+    public IActionResult Index() => View();
+
+    [HttpGet]
+    public IActionResult Data() => Json(store.GetAll());
+
+    [HttpPost]
+    public IActionResult AddBorrowed([FromBody] BorrowedBook item) => Json(store.AddBorrowed(item));
+
+    [HttpPut]
+    public IActionResult EditBorrowed(string id, [FromBody] BorrowedBook item) => store.UpdateBorrowed(id, item) ? NoContent() : NotFound();
+
+    [HttpPost]
+    public IActionResult Returned(string id) => store.MarkReturned(id) is { } item ? Json(item) : NotFound();
+
+    [HttpPost]
+    public IActionResult AddReturned([FromBody] ReturnedBook item) => Json(store.AddReturned(item));
+}

@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Borrowed Books";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages/admin-borrowed-books.css" asp-append-version="true" /> }
+
+<div class="admin-shell">
+    <partial name="_AdminSidebar" />
+    <main class="admin-content">
+        <header class="admin-topbar"><h1>Borrowed Books</h1><span class="admin-user"><i class="bi bi-person-fill"></i> Admin</span></header>
+        <div class="admin-page-body">
+            <section class="admin-table-section" aria-labelledby="borrowed-heading">
+                <h2 id="borrowed-heading">Borrowed and Returned Books</h2>
+                <div class="admin-card"><button id="add-borrowed" class="admin-primary-button" type="button">Add Borrowed Book</button><div id="borrowed-table"></div></div>
+            </section>
+            <section class="admin-table-section" aria-labelledby="returned-heading">
+                <h2 id="returned-heading">Returned Books</h2>
+                <div class="admin-card"><div id="returned-table"></div></div>
+            </section>
+        </div>
+    </main>
+</div>
+
+@section Scripts { <script src="~/js/admin-borrowed-books.js" asp-append-version="true"></script> }

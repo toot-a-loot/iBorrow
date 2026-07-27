@@ -9,6 +9,9 @@
         <a class="admin-sidebar__link" asp-controller="Library" asp-action="Index"><i class="bi bi-layers" aria-hidden="true"></i><span>Books</span></a>
         <a class="admin-sidebar__link @(controller == "AdminBorrowers" ? "is-active" : "")" asp-controller="AdminBorrowers" asp-action="Index" aria-current="@(controller == "AdminBorrowers" ? "page" : null)"><i class="bi bi-person-fill" aria-hidden="true"></i><span>Borrowers Profile</span></a>
         <a class="admin-sidebar__link @(controller == "AdminBorrowedBooks" ? "is-active" : "")" asp-controller="AdminBorrowedBooks" asp-action="Index" aria-current="page"><i class="bi bi-calendar2-check" aria-hidden="true"></i><span>Borrowed Books</span></a>
-        <a class="admin-sidebar__link admin-sidebar__logout" asp-controller="AdminLogin" asp-action="Index"><i class="bi bi-box-arrow-left" aria-hidden="true"></i><span>Logout</span></a>
+        <form class="admin-sidebar__logout-form" asp-controller="AdminLogin" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="admin-sidebar__link admin-sidebar__logout"><i class="bi bi-box-arrow-left" aria-hidden="true"></i><span>Logout</span></button>
+        </form>
     </nav>
 </aside>

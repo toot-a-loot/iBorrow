@@ -29,10 +29,22 @@
                 </li>
             </ul>
 
-            <a class="btn btn-brand rounded-pill d-inline-flex align-items-center gap-2 mt-3 mt-md-0" asp-area="" asp-controller="Login" asp-action="Index">
-                <img src="~/images/userIcon.svg" alt="" class="login-icon" aria-hidden="true" />
-                Login
-            </a>
+            <div class="dropdown account-menu mt-3 mt-md-0">
+                <button class="account-menu__toggle" type="button" id="accountMenuToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">
+                    <img src="~/images/userIcon.svg" alt="" class="account-menu__icon" aria-hidden="true" />
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end account-menu__list" aria-labelledby="accountMenuToggle">
+                    <li>
+                        <button type="button" class="dropdown-item account-menu__item">Account</button>
+                    </li>
+                    <li>
+                        <form asp-area="" asp-controller="Login" asp-action="Logout" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item account-menu__item">Sign out</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>

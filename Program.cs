@@ -1,3 +1,4 @@
+using iBorrow;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +9,16 @@ builder.Services.AddSingleton<iBorrow.Services.CirculationStore>();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.LoginPath = "/Login";
         options.AccessDeniedPath = "/Login";
+    })
+    .AddCookie(AuthSchemes.Admin, options =>
+    {
+        options.Cookie.Name = "iBorrow.Admin";
+        options.LoginPath = "/AdminLogin";
+        options.AccessDeniedPath = "/AdminLogin";
     });
 
 var app = builder.Build();

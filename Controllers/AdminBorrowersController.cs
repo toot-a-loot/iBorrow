@@ -1,9 +1,11 @@
 using iBorrow.Models;
 using iBorrow.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iBorrow.Controllers;
 
+[Authorize(AuthenticationSchemes = AuthSchemes.Admin)]
 public class AdminBorrowersController(CirculationStore store) : Controller
 {
     public IActionResult Index() => View();

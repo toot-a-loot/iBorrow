@@ -40,3 +40,42 @@
   border-color: var(--color-primary-dark);
   color: var(--color-white);
 }
+
+.account-menu__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-menu__toggle:hover,
+.account-menu__toggle:focus-visible {
+  background: var(--color-primary-dark);
+}
+
+.account-menu__icon {
+  width: 20px;
+  height: 20px;
+}
+
+.account-menu__list {
+  min-width: 160px;
+}
+
+.account-menu__item {
+  color: var(--color-black);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.account-menu__item:hover,
+.account-menu__item:focus-visible {
+  color: var(--color-primary);
+  background: #eef0ff;
+}

@@ -10,6 +10,8 @@ body:has(.admin-shell) .main-body { max-width: none; min-height: 100vh; margin: 
 .admin-sidebar__link i { width: 20px; text-align: center; font-size: 21px; }
 .admin-sidebar__link:hover, .admin-sidebar__link.is-active { background: rgba(255,255,255,.16); color: #fff; }
 .admin-sidebar__logout { margin-top: 4px; }
+.admin-sidebar__logout-form { display: block; }
+button.admin-sidebar__logout { width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
 .admin-content { flex: 1; min-width: 0; }
 .admin-topbar { height: 50px; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
 .admin-topbar h1 { margin: 0; font-size: 24px; font-weight: 400; }

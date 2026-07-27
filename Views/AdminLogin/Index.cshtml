@@ -20,7 +20,15 @@
 
         <p class="admin-login-helper-text">Sign in to continue to iBorrow Admin Panel</p>
 
-        <form class="admin-login-form" method="post" action="#" autocomplete="on">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form class="admin-login-form" asp-action="Index" asp-controller="AdminLogin" method="post" autocomplete="on">
+            @Html.AntiForgeryToken()
             <div class="admin-form-row">
                 <label for="admin-email" class="admin-label">Email</label>
                 <input

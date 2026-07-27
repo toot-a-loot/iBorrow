@@ -1,0 +1,41 @@
+{
+  "Borrowed": [
+    {
+      "Id": "01001",
+      "Book": "Trident",
+      "BorrowerId": "c202302014",
+      "BorrowerName": "Tai Taipae",
+      "DateBorrowed": "2023-07-07",
+      "DueDate": "2026-07-10",
+      "Copies": 3,
+      "Status": "Borrowed"
+    },
+    {
+      "Id": "01002",
+      "Book": "asd",
+      "BorrowerId": "1234",
+      "BorrowerName": "asd",
+      "DateBorrowed": "2026-07-27",
+      "DueDate": "2026-07-30",
+      "Copies": 3,
+      "Status": "Borrowed"
+    }
+  ],
+  "Returned": [],
+  "Borrowers": [
+    {
+      "LibraryId": "01001",
+      "StudentId": "c202401067",
+      "Name": "Doe, John",
+      "ContactNo": "901 001 0100",
+      "Email": "c202401067@iacademy.edu.ph"
+    },
+    {
+      "LibraryId": "01002",
+      "StudentId": "dfgdfgdfgd",
+      "Name": "Andales, Raphael",
+      "ContactNo": "3333231321564",
+      "Email": "asdfasdf@gmail.com"
+    }
+  ]
+}

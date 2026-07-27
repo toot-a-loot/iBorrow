@@ -41,6 +41,7 @@
 <section class="home-quick-actions-section" aria-label="Quick Actions">
     <div class="home-quick-actions">
 
+        @* browse books *@
         <a class="home-quick-actions__item" asp-area="" asp-controller="Library" asp-action="Index">
             <span class="home-quick-actions__icon">
                 <i class="bi bi-book" aria-hidden="true"></i>
@@ -51,6 +52,7 @@
             </span>
         </a>
 
+        @* borrow book *@
         <a class="home-quick-actions__item" asp-area="" asp-controller="Borrowing" asp-action="Index">
             <span class="home-quick-actions__icon">
                 <i class="bi bi-bookmark" aria-hidden="true"></i>
@@ -61,6 +63,7 @@
             </span>
         </a>
 
+        @* view reminder *@
         <a class="home-quick-actions__item" asp-area="" asp-controller="Borrowing" asp-action="Index">
             <span class="home-quick-actions__icon">
                 <i class="bi bi-bell" aria-hidden="true"></i>
@@ -71,13 +74,14 @@
             </span>
         </a>
 
+        @* track borrowing *@
         <a class="home-quick-actions__item" asp-area="" asp-controller="Borrowing" asp-action="Index">
             <span class="home-quick-actions__icon">
                 <i class="bi bi-bar-chart" aria-hidden="true"></i>
             </span>
             <span class="home-quick-actions__text">
                 <span class="home-quick-actions__title">Track Borrowings</span>
-                <span class="home-quick-actions__subtitle">View of books you've borrowed</span>
+                <span class="home-quick-actions__subtitle">View borrowed books</span>
             </span>
         </a>
 

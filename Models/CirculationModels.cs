@@ -18,3 +18,12 @@ public class ReturnedBook : BorrowedBook
     public string DateReturned { get; set; } = string.Empty;
     public string ReceivedBy { get; set; } = string.Empty;
 }
+
+public class BorrowerProfile
+{
+    public string LibraryId { get; set; } = string.Empty;
+    public string StudentId { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string ContactNo { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+}

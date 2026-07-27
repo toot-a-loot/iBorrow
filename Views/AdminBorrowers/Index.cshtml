@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Borrowers Profile";
+}
+
+@section Styles { <link rel="stylesheet" href="~/css/pages/admin-borrowed-books.css" asp-append-version="true" /> }
+
+<div class="admin-shell">
+    <partial name="_AdminSidebar" />
+    <main class="admin-content">
+        <header class="admin-topbar"><h1>Borrowers Profile</h1><span class="admin-user"><i class="bi bi-person-fill"></i> Admin</span></header>
+        <div class="admin-page-body">
+            <section class="admin-table-section" aria-labelledby="borrowers-heading">
+                <h2 id="borrowers-heading">Borrowers</h2>
+                <div class="admin-card"><button id="add-borrower" class="admin-primary-button" type="button">Add Borrower</button><div id="borrowers-table"></div></div>
+            </section>
+        </div>
+    </main>
+</div>
+
+@section Scripts { <script src="~/js/admin-borrowers.js" asp-append-version="true"></script> }

@@ -1,20 +1,22 @@
 @{
-    ViewData["Title"] = "Borrowers Profile";
+    ViewData["Title"] = "Borrowers Overview";
 }
 
-@section Styles { <link rel="stylesheet" href="~/css/pages/admin-borrowed-books.css" asp-append-version="true" /> }
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin-borrowed-books.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/admin-overview.css" asp-append-version="true" />
+}
 
 <div class="admin-shell">
     <partial name="_AdminSidebar" />
     <main class="admin-content">
-        <header class="admin-topbar"><h1>Borrowers Profile</h1><span class="admin-user"><i class="bi bi-person-fill"></i> Admin</span></header>
-        <div class="admin-page-body">
-            <section class="admin-table-section" aria-labelledby="borrowers-heading">
-                <h2 id="borrowers-heading">Borrowers</h2>
-                <div class="admin-card"><button id="add-borrower" class="admin-primary-button" type="button">Add Borrower</button><div id="borrowers-table"></div></div>
-            </section>
+        <header class="admin-topbar"><h1>Borrowers Overview</h1><span class="admin-user"><i class="bi bi-person-fill"></i> Admin</span></header>
+        <div class="admin-overview-body">
+            <div class="overview-search-wrap"><label class="visually-hidden" for="borrower-overview-search">Search borrowers</label><i class="bi bi-search" aria-hidden="true"></i><input id="borrower-overview-search" type="search" placeholder="Search by Name, ID" autocomplete="off" /></div>
+            <section class="overview-section" aria-labelledby="overdue-heading"><h2 id="overdue-heading">Overdue</h2><div id="overdue-cards" class="overview-grid"></div><button class="see-more" id="overdue-more" type="button">See More <span aria-hidden="true">→</span></button></section>
+            <section class="overview-section" aria-labelledby="borrowers-heading"><h2 id="borrowers-heading">Borrowers</h2><div id="borrower-cards" class="overview-grid"></div><button class="see-more" id="borrowers-more" type="button">See More <span aria-hidden="true">→</span></button></section>
         </div>
     </main>
 </div>
 
-@section Scripts { <script src="~/js/admin-borrowers.js" asp-append-version="true"></script> }
+@section Scripts { <script src="~/js/admin-overview.js" asp-append-version="true"></script> }

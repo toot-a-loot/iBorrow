@@ -1,0 +1,17 @@
+.admin-overview-body { padding: 12px 20px 28px; }
+.overview-search-wrap { position: relative; width: min(100%, 258px); margin-bottom: 25px; }
+.overview-search-wrap i { position: absolute; left: 12px; top: 8px; color: #0716c6; font-size: 18px; }
+.overview-search-wrap input { width: 100%; height: 32px; border: 2px solid #0716c6; border-radius: 8px; padding: 0 12px 0 34px; outline: none; font: 12px Arial, sans-serif; box-sizing: border-box; }
+.overview-search-wrap input:focus { box-shadow: 0 0 0 3px rgba(7, 22, 198, .15); }
+.overview-section { margin-bottom: 24px; }
+.overview-section h2 { margin: 0 0 7px; font-size: 18px; }
+.overview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 25px; }
+.borrower-card { display: flex; justify-content: space-between; gap: 14px; min-height: 108px; box-sizing: border-box; padding: 8px 9px 8px 13px; border: 1px solid #c7c7c7; border-left: 6px solid #1022d1; border-radius: 8px; color: #111; text-decoration: none; font: 11px Arial, sans-serif; transition: box-shadow .15s, transform .15s; }
+.borrower-card:hover { color: #111; box-shadow: 0 3px 10px rgba(0,0,0,.16); transform: translateY(-1px); }
+.borrower-card--overdue { border-left-color: #f20d16; }.borrower-card--nearly-due { border-left-color: #efa900; }
+.borrower-card__details { min-width: 0; }.borrower-card__library, .borrower-card__muted { color: #888; font-weight: 700; }.borrower-card__details strong { display: block; margin: 2px 0; font-size: 14px; }.borrower-card__books { margin-top: 13px; line-height: 1.45; }.borrower-card__books span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.borrower-card__meta { flex: 0 0 auto; text-align: right; line-height: 1.55; padding-top: 1px; }.borrower-card__meta b { color: #1022d1; font-weight: 400; }.borrower-card--overdue .borrower-card__meta b { color: #f20d16; }.borrower-card--nearly-due .borrower-card__meta b { color: #efa900; }
+.status-badge { display: inline-block; margin-bottom: 4px; padding: 3px 8px; border-radius: 4px; background: #cbd5ff; color: #1022d1; font-size: 10px; }.borrower-card--overdue .status-badge { background: #ffb9bc; color: #e60913; }.borrower-card--nearly-due .status-badge { background: #ffe8b0; color: #d28d00; }
+.see-more { margin-top: 14px; border: 0; padding: 0; background: transparent; color: #aabff0; cursor: pointer; font: 13px Arial, sans-serif; }.see-more:hover { color: #1022d1; }.overview-empty { color: #777; font-size: 13px; }.overview-section.is-all-loaded .overview-grid { max-height: 52vh; overflow-y: auto; padding-right: 8px; }
+@media (max-width: 1050px) { .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .admin-overview-body { padding: 12px; }.overview-grid { grid-template-columns: 1fr; gap: 12px; }.borrower-card { min-height: 116px; } }

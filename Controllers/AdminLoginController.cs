@@ -30,7 +30,7 @@ namespace iBorrow.Controllers
             var identity = new ClaimsIdentity(claims, AuthSchemes.Admin);
             await HttpContext.SignInAsync(AuthSchemes.Admin, new ClaimsPrincipal(identity));
 
-            return RedirectToAction("Index", "AdminBorrowedBooks");
+            return RedirectToAction("Index", "AdminBorrowers");
         }
 
         [Authorize(AuthenticationSchemes = AuthSchemes.Admin)]

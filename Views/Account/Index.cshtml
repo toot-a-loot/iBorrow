@@ -1,0 +1,47 @@
+@model iBorrow.Models.AccountViewModel
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/account.css" asp-append-version="true" />
+}
+
+<section class="account-page">
+    <h1 class="account-page__title">My Account</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">@TempData["SuccessMessage"]</div>
+    }
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+    }
+
+    <div class="account-card">
+        <div class="account-card__row">
+            <span class="account-card__label">Email</span>
+            <span class="account-card__value">@Model.Email</span>
+        </div>
+
+        <form asp-controller="Account" asp-action="Rename" method="post" class="account-card__form">
+            @Html.AntiForgeryToken()
+            <label for="displayName" class="account-card__label">Display Name</label>
+            <div class="account-card__form-row">
+                <input id="displayName" name="displayName" type="text" value="@Model.DisplayName" class="account-card__input" required />
+                <button type="submit" class="account-card__save-btn">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="account-card account-card--danger">
+        <h2 class="account-card__danger-title">Danger Zone</h2>
+        <p class="account-card__danger-text">Deleting your account is permanent and cannot be undone.</p>
+        <form asp-controller="Account" asp-action="Delete" method="post" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.');">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="account-card__delete-btn">Delete Account</button>
+        </form>
+    </div>
+</section>

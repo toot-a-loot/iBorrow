@@ -1,0 +1,27 @@
+@model IReadOnlyList<iBorrow.Models.NotificationItem>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/notifications.css" asp-append-version="true" />
+}
+
+<section class="notifications-page">
+    <h1 class="notifications-page__title">Notifications</h1>
+
+    <ul class="notifications-list">
+        @foreach (var item in Model)
+        {
+            <li class="notifications-list__item @(item.IsUnread ? "is-unread" : "")">
+                <span class="notifications-list__icon" aria-hidden="true"><i class="bi bi-bell"></i></span>
+                <span class="notifications-list__body">
+                    <span class="notifications-list__title">@item.Title</span>
+                    <span class="notifications-list__message">@item.Message</span>
+                </span>
+                <span class="notifications-list__time">@item.TimeAgo</span>
+            </li>
+        }
+    </ul>
+</section>

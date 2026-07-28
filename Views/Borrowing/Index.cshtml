@@ -38,7 +38,7 @@
     <div class="stat-card">
         <span class="stat-card__icon stat-card__icon--blue"><i class="bi bi-book" aria-hidden="true"></i></span>
         <span class="stat-card__text">
-            <span class="stat-card__value">3</span>
+            <span class="stat-card__value" id="stat-active">0</span>
             <span class="stat-card__label">Active Books</span>
             <span class="stat-card__sublabel">Currently borrowed</span>
         </span>
@@ -46,7 +46,7 @@
     <div class="stat-card">
         <span class="stat-card__icon stat-card__icon--red"><i class="bi bi-exclamation-lg" aria-hidden="true"></i></span>
         <span class="stat-card__text">
-            <span class="stat-card__value">1</span>
+            <span class="stat-card__value" id="stat-overdue">0</span>
             <span class="stat-card__label">Overdue</span>
             <span class="stat-card__sublabel">Return overdue</span>
         </span>
@@ -54,7 +54,7 @@
     <div class="stat-card">
         <span class="stat-card__icon stat-card__icon--orange"><i class="bi bi-clock-fill" aria-hidden="true"></i></span>
         <span class="stat-card__text">
-            <span class="stat-card__value">2</span>
+            <span class="stat-card__value" id="stat-due">0</span>
             <span class="stat-card__label">Due This Week</span>
             <span class="stat-card__sublabel">Due in 7 days</span>
         </span>
@@ -62,7 +62,7 @@
     <div class="stat-card">
         <span class="stat-card__icon stat-card__icon--green"><i class="bi bi-check-lg" aria-hidden="true"></i></span>
         <span class="stat-card__text">
-            <span class="stat-card__value">12</span>
+            <span class="stat-card__value" id="stat-returned">0</span>
             <span class="stat-card__label">Returned</span>
             <span class="stat-card__sublabel">Total returned</span>
         </span>
@@ -81,28 +81,28 @@
 
 @* search & filter *@
 
-<form class="filter-bar" role="search" aria-label="Search borrowed books" method="get" action="">
+<form class="filter-bar" role="search" aria-label="Search borrowed books" onsubmit="return false;">
     <div class="filter-search">
         <i class="bi bi-search filter-search__icon" aria-hidden="true"></i>
-        <input type="search" name="search" class="filter-search__input" placeholder="Search borrowed books..." aria-label="Search borrowed books" autocomplete="off" />
+        <input id="borrowSearch" type="search" name="search" class="filter-search__input" placeholder="Search borrowed books..." aria-label="Search borrowed books" autocomplete="off" />
     </div>
 
     <div class="filter-cell">
         <label for="statusSelect" class="filter-cell__label">Status</label>
         <select id="statusSelect" name="status" class="filter-cell__select" aria-label="Filter by status">
-            <option>All</option>
-            <option>Overdue</option>
-            <option>Due Soon</option>
-            <option>Returned</option>
+            <option value="">All</option>
+            <option value="overdue">Overdue</option>
+            <option value="due-soon">Due Soon</option>
+            <option value="returned">Returned</option>
         </select>
     </div>
 
     <div class="filter-cell">
         <label for="borrowedSortSelect" class="filter-cell__label">Sort by</label>
         <select id="borrowedSortSelect" name="sortBy" class="filter-cell__select" aria-label="Sort results by">
-            <option>Due Date (Soonest)</option>
-            <option>Due Date (Latest)</option>
-            <option>Title (A-Z)</option>
+            <option value="due-soonest">Due Date (Soonest)</option>
+            <option value="due-latest">Due Date (Latest)</option>
+            <option value="title">Title (A-Z)</option>
         </select>
     </div>
 </form>
@@ -115,43 +115,14 @@
                 data-bs-toggle="collapse" data-bs-target="#overdueList" aria-expanded="true" aria-controls="overdueList">
             <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
             Overdue
-            <span class="my-books-section__count">(1)</span>
+            <span class="my-books-section__count" id="overdue-count">(0)</span>
             <i class="bi bi-chevron-down my-books-section__chevron" aria-hidden="true"></i>
         </button>
     </h2>
 
-    @* Future: @foreach(var loan in Model.Overdue) { *@
     <div class="collapse show" id="overdueList">
-        <ul class="borrowed-list" role="list">
-
-            <li class="borrowed-card borrowed-card--overdue" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Overdue">
-                <div class="borrowed-card__cover-wrapper">
-                    <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="borrowed-card__cover" loading="lazy" />
-                </div>
-                <div class="borrowed-card__info">
-                    <h3 class="borrowed-card__title">1984</h3>
-                    <p class="borrowed-card__author">George Orwell</p>
-                    <span class="borrowed-badge borrowed-badge--overdue">Overdue</span>
-                </div>
-                <div class="borrowed-card__dates">
-                    <span class="borrowed-card__date-block">
-                        <span class="borrowed-card__date-label">Borrowed</span>
-                        <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Jul 01, 2026</span>
-                    </span>
-                    <span class="borrowed-card__date-block">
-                        <span class="borrowed-card__date-label">Due Date</span>
-                        <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Jul 25, 2026</span>
-                    </span>
-                </div>
-                <div class="borrowed-card__chip borrowed-card__chip--overdue">
-                    <span class="borrowed-card__chip-main">3 days overdue</span>
-                    <span class="borrowed-card__chip-sub">Due on Jul 25, 2026</span>
-                </div>
-            </li>
-
-        </ul>
+        <ul class="borrowed-list" role="list" id="overdue-items"></ul>
     </div>
-    @* Future: } (end foreach) *@
 </section>
 
 @* Due this week *@
@@ -162,68 +133,14 @@
                 data-bs-toggle="collapse" data-bs-target="#dueWeekList" aria-expanded="true" aria-controls="dueWeekList">
             <i class="bi bi-clock-fill" aria-hidden="true"></i>
             Due This Week
-            <span class="my-books-section__count">(2)</span>
+            <span class="my-books-section__count" id="due-week-count">(0)</span>
             <i class="bi bi-chevron-down my-books-section__chevron" aria-hidden="true"></i>
         </button>
     </h2>
 
-    @* Future: @foreach(var loan in Model.DueThisWeek) { *@
     <div class="collapse show" id="dueWeekList">
-        <ul class="borrowed-list" role="list">
-
-            <li class="borrowed-card borrowed-card--due-soon" role="listitem" tabindex="0" aria-label="Atomic Habits by James Clear, Due Soon">
-                <div class="borrowed-card__cover-wrapper">
-                    <div class="borrowed-card__cover-placeholder borrowed-card__cover-placeholder--tan" aria-hidden="true">Atomic Habits</div>
-                </div>
-                <div class="borrowed-card__info">
-                    <h3 class="borrowed-card__title">Atomic Habits</h3>
-                    <p class="borrowed-card__author">James Clear</p>
-                    <span class="borrowed-badge borrowed-badge--due-soon">Due Soon</span>
-                </div>
-                <div class="borrowed-card__dates">
-                    <span class="borrowed-card__date-block">
-                        <span class="borrowed-card__date-label">Borrowed</span>
-                        <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Jul 12, 2026</span>
-                    </span>
-                    <span class="borrowed-card__date-block">
-                        <span class="borrowed-card__date-label">Due Date</span>
-                        <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Aug 02, 2026</span>
-                    </span>
-                </div>
-                <div class="borrowed-card__chip borrowed-card__chip--due-soon">
-                    <span class="borrowed-card__chip-main">5 days left</span>
-                    <span class="borrowed-card__chip-sub">Due on Aug 02, 2026</span>
-                </div>
-            </li>
-
-            <li class="borrowed-card borrowed-card--due-soon" role="listitem" tabindex="0" aria-label="The Great Gatsby by F. Scott Fitzgerald, Due Soon">
-                <div class="borrowed-card__cover-wrapper">
-                    <div class="borrowed-card__cover-placeholder borrowed-card__cover-placeholder--navy" aria-hidden="true">The Great Gatsby</div>
-                </div>
-                <div class="borrowed-card__info">
-                    <h3 class="borrowed-card__title">The Great Gatsby</h3>
-                    <p class="borrowed-card__author">F. Scott Fitzgerald</p>
-                    <span class="borrowed-badge borrowed-badge--due-soon">Due Soon</span>
-                </div>
-                <div class="borrowed-card__dates">
-                    <span class="borrowed-card__date-block">
-                        <span class="borrowed-card__date-label">Borrowed</span>
-                        <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Jul 17, 2026</span>
-                    </span>
-                    <span class="borrowed-card__date-block">
-                        <span class="borrowed-card__date-label">Due Date</span>
-                        <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Aug 07, 2026</span>
-                    </span>
-                </div>
-                <div class="borrowed-card__chip borrowed-card__chip--due-soon">
-                    <span class="borrowed-card__chip-main">10 days left</span>
-                    <span class="borrowed-card__chip-sub">Due on Aug 07, 2026</span>
-                </div>
-            </li>
-
-        </ul>
+        <ul class="borrowed-list" role="list" id="due-week-items"></ul>
     </div>
-    @* Future: } (end foreach) *@
 </section>
 
 @* Recently returned *@
@@ -234,65 +151,10 @@
             <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
             Recently Returned
         </h2>
-        <select class="filter-cell__select returned-panel__sort" aria-label="Sort returned books">
-            <option>Sort by: Recently Returned</option>
-            <option>Sort by: Title (A-Z)</option>
-        </select>
     </div>
     <p class="returned-panel__subtitle">Books you have returned for the past 3 months.</p>
 
-    @* Future: @foreach(var loan in Model.Returned) { *@
-    <ul class="returned-list" role="list">
-
-        <li class="returned-item" role="listitem" tabindex="0" aria-label="The Hobbit by J.R.R. Tolkien, Returned">
-            <div class="returned-item__cover-wrapper">
-                <div class="borrowed-card__cover-placeholder borrowed-card__cover-placeholder--charcoal" aria-hidden="true">The Hobbit</div>
-            </div>
-            <div class="returned-item__info">
-                <h3 class="returned-item__title">The Hobbit</h3>
-                <p class="returned-item__author">J.R.R. Tolkien</p>
-            </div>
-            <div class="borrowed-card__dates">
-                <span class="borrowed-card__date-block">
-                    <span class="borrowed-card__date-label">Borrowed</span>
-                    <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> May 20, 2026</span>
-                </span>
-                <span class="borrowed-card__date-block">
-                    <span class="borrowed-card__date-label">Returned</span>
-                    <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> Jun 05, 2026</span>
-                </span>
-            </div>
-            <span class="borrowed-badge borrowed-badge--returned">Returned</span>
-        </li>
-
-        <li class="returned-item" role="listitem" tabindex="0" aria-label="The Alchemist by Paulo Coelho, Returned">
-            <div class="returned-item__cover-wrapper">
-                <div class="borrowed-card__cover-placeholder borrowed-card__cover-placeholder--purple" aria-hidden="true">The Alchemist</div>
-            </div>
-            <div class="returned-item__info">
-                <h3 class="returned-item__title">The Alchemist</h3>
-                <p class="returned-item__author">Paulo Coelho</p>
-            </div>
-            <div class="borrowed-card__dates">
-                <span class="borrowed-card__date-block">
-                    <span class="borrowed-card__date-label">Borrowed</span>
-                    <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> May 10, 2026</span>
-                </span>
-                <span class="borrowed-card__date-block">
-                    <span class="borrowed-card__date-label">Returned</span>
-                    <span class="borrowed-card__date-value"><i class="bi bi-calendar3" aria-hidden="true"></i> May 24, 2026</span>
-                </span>
-            </div>
-            <span class="borrowed-badge borrowed-badge--returned">Returned</span>
-        </li>
-
-    </ul>
-    @* Future: } (end foreach) *@
-
-    <button type="button" class="returned-panel__view-all">
-        View all returned books
-        <i class="bi bi-chevron-right" aria-hidden="true"></i>
-    </button>
+    <ul class="returned-list" role="list" id="returned-items"></ul>
 </section>
 
 @* browse library *@
@@ -321,3 +183,7 @@
         Library Guidelines
     </a>
 </div>
+
+@section Scripts {
+    <script src="~/js/borrowing.js" asp-append-version="true"></script>
+}

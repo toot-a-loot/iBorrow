@@ -99,6 +99,47 @@ public sealed class BookStore
         }
     }
 
+    public bool Update(BookItem item)
+    {
+        if (item == null || string.IsNullOrWhiteSpace(item.Id)) return false;
+        lock (_sync)
+        {
+            var existing = _books.FirstOrDefault(b => string.Equals(b.Id, item.Id, StringComparison.OrdinalIgnoreCase));
+            if (existing == null) return false;
+
+            existing.Title = item.Title;
+            existing.Author = item.Author;
+            existing.Category = item.Category;
+            existing.Synopsis = item.Synopsis;
+            existing.Tags = item.Tags;
+            existing.TotalCopies = Math.Max(item.TotalCopies, 1);
+            if (!string.IsNullOrWhiteSpace(item.CoverImageUrl))
+            {
+                existing.CoverImageUrl = item.CoverImageUrl;
+            }
+
+            foreach (var tag in item.Tags.Where(t => !string.IsNullOrWhiteSpace(t)))
+                EnsureTag(tag);
+
+            Save();
+            return true;
+        }
+    }
+
+    public bool Delete(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id)) return false;
+        lock (_sync)
+        {
+            var existing = _books.FirstOrDefault(b => string.Equals(b.Id, id, StringComparison.OrdinalIgnoreCase));
+            if (existing == null) return false;
+
+            _books.Remove(existing);
+            Save();
+            return true;
+        }
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private static BookItemDto Enrich(BookItem b, List<BorrowedBook> activeBorrows)

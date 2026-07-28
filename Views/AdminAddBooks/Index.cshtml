@@ -95,6 +95,7 @@
                         </div>
 
                         <form id="ab-book-form" novalidate>
+                            <input id="ab-f-id" type="hidden" name="id" />
                             <div class="ab-modal-body">
                                 <!-- Left column: fields -->
                                 <div class="ab-modal-fields">
@@ -141,7 +142,10 @@
                                     <textarea class="ab-field-textarea" id="ab-f-synopsis" name="synopsis"
                                               placeholder="Write a short Synopsis for the Book..." required></textarea>
                                     <div class="ab-modal-actions">
-                                        <button id="ab-cancel-btn" class="ab-secondary-btn" type="button">Cancel</button>
+                                        <div class="ab-action-left">
+                                            <button id="ab-cancel-btn" class="ab-secondary-btn" type="button">Cancel</button>
+                                            <button id="ab-delete-btn" class="ab-danger-btn" type="button" hidden>Delete</button>
+                                        </div>
                                         <button id="ab-submit-btn" class="ab-primary-btn" type="submit" disabled>Submit</button>
                                     </div>
                                 </div>

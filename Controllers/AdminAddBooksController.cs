@@ -91,6 +91,85 @@ public class AdminAddBooksController(BookStore books, IWebHostEnvironment env) :
         return Json(saved);
     }
 
+    // POST /AdminAddBooks/Update  (multipart/form-data)
+    [HttpPost]
+    public async Task<IActionResult> Update(
+        [FromForm] string id,
+        [FromForm] string title,
+        [FromForm] string author,
+        [FromForm] string category,
+        [FromForm] string synopsis,
+        [FromForm] string? tags,
+        [FromForm] int totalCopies,
+        IFormFile? coverImage)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return BadRequest("Book ID is required.");
+
+        if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(author) ||
+            string.IsNullOrWhiteSpace(category) || string.IsNullOrWhiteSpace(synopsis))
+            return BadRequest("Title, Author, Category and Synopsis are required.");
+
+        var coverUrl = string.Empty;
+
+        if (coverImage is { Length: > 0 })
+        {
+            var ext = Path.GetExtension(coverImage.FileName).ToLowerInvariant();
+            if (!AllowedExtensions.Contains(ext))
+                return BadRequest("Only PNG, JPG, JPEG and WEBP images are accepted.");
+            if (coverImage.Length > MaxFileSizeBytes)
+                return BadRequest("Image must be smaller than 5 MB.");
+
+            var uploadDir = Path.Combine(env.WebRootPath, "uploads", "books");
+            Directory.CreateDirectory(uploadDir);
+            var fileName = $"{Guid.NewGuid():N}{ext}";
+            var fullPath = Path.Combine(uploadDir, fileName);
+            await using var stream = System.IO.File.Create(fullPath);
+            await coverImage.CopyToAsync(stream);
+            coverUrl = $"/uploads/books/{fileName}";
+        }
+
+        var tagList = (tags ?? string.Empty)
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        var item = new BookItem
+        {
+            Id = id.Trim(),
+            Title = title.Trim(),
+            Author = author.Trim(),
+            Category = category.Trim(),
+            Synopsis = synopsis.Trim(),
+            Tags = tagList,
+            CoverImageUrl = coverUrl,
+            TotalCopies = Math.Max(totalCopies, 1)
+        };
+
+        var updated = books.Update(item);
+        if (!updated) return NotFound("Book not found.");
+        return Json(new { success = true });
+    }
+
+    // POST /AdminAddBooks/Delete
+    [HttpPost]
+    public IActionResult Delete([FromBody] DeleteRequest? request)
+    {
+        var id = request?.Id;
+        if (string.IsNullOrWhiteSpace(id))
+            return BadRequest("Book ID is required.");
+
+        var deleted = books.Delete(id.Trim());
+        if (!deleted) return NotFound("Book not found.");
+        return Json(new { success = true });
+    }
+
+    public sealed class DeleteRequest
+    {
+        public string? Id { get; set; }
+    }
+
     public sealed class TagRequest
     {
         public string? Tag { get; set; }

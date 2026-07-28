@@ -23,6 +23,7 @@
         searchShownRows: INITIAL_ROWS,
         // Selected tags in modal
         selectedTags: [],
+        editingBookId: null,
     };
 
     /* ── Helpers ────────────────────────────────────────────────────────── */
@@ -41,7 +42,7 @@
         const coverHtml = book.coverImageUrl
             ? `<img class="ab-book-cover" src="${esc(book.coverImageUrl)}" alt="${esc(book.title)} cover" loading="lazy" />`
             : `<div class="ab-book-cover-placeholder" aria-hidden="true"></div>`;
-        return `<div class="ab-book-card">
+        return `<div class="ab-book-card" data-id="${esc(book.id)}">
             ${coverHtml}
             <div class="ab-book-info">
                 <div class="ab-book-title" title="${esc(book.title)}">${esc(book.title)}</div>
@@ -241,14 +242,47 @@
     /* ══════════════════════════════════════════════════════════════════════
      *  MODAL
      * ════════════════════════════════════════════════════════════════════ */
-    const overlay   = document.getElementById('ab-modal-overlay');
-    const form      = document.getElementById('ab-book-form');
-    const submitBtn = document.getElementById('ab-submit-btn');
+    const overlay    = document.getElementById('ab-modal-overlay');
+    const form       = document.getElementById('ab-book-form');
+    const submitBtn  = document.getElementById('ab-submit-btn');
+    const deleteBtn  = document.getElementById('ab-delete-btn');
+    const modalTitle = document.getElementById('ab-modal-title');
 
-    function openModal() {
+    function openAddModal() {
+        state.editingBookId = null;
+        resetModal();
         overlay.hidden = false;
         document.body.style.overflow = 'hidden';
+        form.querySelector('#ab-f-title')?.focus();
+    }
+
+    function openEditModal(book) {
         resetModal();
+        state.editingBookId = book.id;
+        if (modalTitle) modalTitle.textContent = 'Edit Book';
+        if (deleteBtn) deleteBtn.hidden = false;
+
+        form.querySelector('#ab-f-id').value = book.id || '';
+        form.querySelector('#ab-f-title').value = book.title || '';
+        form.querySelector('#ab-f-author').value = book.author || '';
+        form.querySelector('#ab-f-category').value = book.category || '';
+        form.querySelector('#ab-f-synopsis').value = book.synopsis || '';
+        form.querySelector('#ab-f-copies').value = book.totalCopies || 1;
+
+        state.selectedTags = Array.isArray(book.tags) ? [...book.tags] : [];
+        renderTagChips();
+        renderTagDropdown('');
+
+        const preview = document.getElementById('ab-cover-preview');
+        if (book.coverImageUrl) {
+            preview.innerHTML = `<img src="${esc(book.coverImageUrl)}" alt="${esc(book.title)} cover" />`;
+        } else {
+            preview.innerHTML = '<span class="ab-cover-placeholder-text">Image Preview</span>';
+        }
+
+        updateSubmitState();
+        overlay.hidden = false;
+        document.body.style.overflow = 'hidden';
         form.querySelector('#ab-f-title')?.focus();
     }
 
@@ -259,20 +293,70 @@
 
     function resetModal() {
         form.reset();
+        state.editingBookId = null;
         state.selectedTags = [];
         renderTagChips();
         renderTagDropdown('');
         document.getElementById('ab-cover-preview').innerHTML =
             '<span class="ab-cover-placeholder-text">Image Preview</span>';
         document.getElementById('ab-cover-input').value = '';
+        if (modalTitle) modalTitle.textContent = 'Add Book';
+        if (deleteBtn) {
+            deleteBtn.hidden = true;
+            deleteBtn.disabled = false;
+            deleteBtn.textContent = 'Delete';
+        }
         updateSubmitState();
     }
 
-    // Open
-    document.getElementById('ab-add-btn')?.addEventListener('click', openModal);
+    // Open Add Modal
+    document.getElementById('ab-add-btn')?.addEventListener('click', openAddModal);
     // Back / Cancel
     document.getElementById('ab-modal-back')?.addEventListener('click', closeModal);
     document.getElementById('ab-cancel-btn')?.addEventListener('click', closeModal);
+
+    // Card click -> Edit Modal
+    document.addEventListener('click', e => {
+        const card = e.target.closest('.ab-book-card');
+        if (!card) return;
+        const bookId = card.dataset.id;
+        if (!bookId) return;
+        const book = state.allBooks.find(b => b.id === bookId);
+        if (book) openEditModal(book);
+    });
+
+    // Delete Book
+    deleteBtn?.addEventListener('click', async () => {
+        if (!state.editingBookId) return;
+        if (!confirm('Are you sure you want to delete this book?')) return;
+
+        deleteBtn.disabled = true;
+        deleteBtn.textContent = 'Deleting…';
+
+        try {
+            const res = await fetch('/AdminAddBooks/Delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: state.editingBookId })
+            });
+
+            if (!res.ok) {
+                const msg = await res.text();
+                alert(`Could not delete book: ${msg}`);
+                deleteBtn.disabled = false;
+                deleteBtn.textContent = 'Delete';
+                return;
+            }
+
+            closeModal();
+            await loadBooks();
+            await loadTags();
+        } catch {
+            alert('A network error occurred. Please try again.');
+            deleteBtn.disabled = false;
+            deleteBtn.textContent = 'Delete';
+        }
+    });
     // Do NOT close on overlay click (per spec)
 
     /* ── Submit validation ──────────────────────────────────────────────── */
@@ -410,8 +494,14 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Saving…';
 
+        const isEdit = !!state.editingBookId;
+        const url = isEdit ? '/AdminAddBooks/Update' : '/AdminAddBooks/Add';
+
         const coverFile = document.getElementById('ab-cover-input')?.files?.[0];
         const fd = new FormData();
+        if (isEdit) {
+            fd.append('id', state.editingBookId);
+        }
         fd.append('title',       form.querySelector('#ab-f-title').value.trim());
         fd.append('author',      form.querySelector('#ab-f-author').value.trim());
         fd.append('category',    form.querySelector('#ab-f-category').value);
@@ -421,7 +511,7 @@
         if (coverFile) fd.append('coverImage', coverFile);
 
         try {
-            const res = await fetch('/AdminAddBooks/Add', { method: 'POST', body: fd });
+            const res = await fetch(url, { method: 'POST', body: fd });
             if (!res.ok) {
                 const msg = await res.text();
                 alert(`Could not save book: ${msg}`);
@@ -431,7 +521,7 @@
             closeModal();
             await loadBooks();   // refresh all sections
             await loadTags();    // in case new tags were created
-        } catch (err) {
+        } catch {
             alert('A network error occurred. Please try again.');
             updateSubmitState();
         }

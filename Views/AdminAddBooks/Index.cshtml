@@ -38,7 +38,7 @@
                         <h3 class="ab-filter-heading">Category</h3>
                         <div class="ab-filter-checks" id="ab-cat-filters">
                             @foreach (var cat in new[] { "Software Engineering", "Game Development", "Multimedia Arts",
-                     "Real Estate", "Filipiniana" })
+                     "Real Estate", "Filipiniana", "Others" })
                             {
                                 var id = "cat-" + cat.Replace(" ", "-").ToLower();
                                 <label class="ab-check-label" for="@id">
@@ -68,7 +68,7 @@
 
                 <!-- Category Sections -->
                 @foreach (var cat in new[] { "Software Engineering", "Game Development", "Multimedia Arts", "Real Estate",
-      "Filipiniana" })
+      "Filipiniana", "Others" })
                 {
                     var sectionId = "ab-section-" + cat.Replace(" ", "-").ToLower();
                     var gridId = "ab-grid-" + cat.Replace(" ", "-").ToLower();
@@ -118,6 +118,14 @@
                                             <option>Multimedia Arts</option>
                                             <option>Real Estate</option>
                                             <option>Filipiniana</option>
+                                            <option>Others</option>
+                                        </select>
+                                    </div>
+                                    <div class="ab-field-group">
+                                        <label class="ab-field-label" for="ab-f-status">Status</label>
+                                        <select class="ab-field-input" id="ab-f-status" name="status">
+                                            <option value="available" selected>Available</option>
+                                            <option value="unavailable">Unavailable</option>
                                         </select>
                                     </div>
                                     <div class="ab-field-group">

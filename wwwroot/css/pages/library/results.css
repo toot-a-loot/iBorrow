@@ -41,6 +41,15 @@
   margin-bottom: var(--spacing-sm);
 }
 
+.book-cover-img {
+  aspect-ratio: 2 / 3;
+  width: 100%;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-bottom: var(--spacing-sm);
+}
+
 .book-title {
   font-weight: 700;
   font-size: 0.95rem;

@@ -5,7 +5,7 @@
     'use strict';
 
     /* ── Constants ──────────────────────────────────────────────────────── */
-    const CATEGORIES = ['Software Engineering', 'Game Development', 'Multimedia Arts', 'Real Estate', 'Filipiniana'];
+    const CATEGORIES = ['Software Engineering', 'Game Development', 'Multimedia Arts', 'Real Estate', 'Filipiniana', 'Others'];
     const INITIAL_ROWS = 1;   // rows shown before "See More"
     const EXTRA_ROWS   = 2;   // rows added per "See More" click
     const COLS         = computeCols(); // columns visible in the grid
@@ -268,6 +268,7 @@
         form.querySelector('#ab-f-category').value = book.category || '';
         form.querySelector('#ab-f-synopsis').value = book.synopsis || '';
         form.querySelector('#ab-f-copies').value = book.totalCopies || 1;
+        form.querySelector('#ab-f-status').value = book.isManuallyUnavailable ? 'unavailable' : 'available';
 
         state.selectedTags = Array.isArray(book.tags) ? [...book.tags] : [];
         renderTagChips();
@@ -293,6 +294,7 @@
 
     function resetModal() {
         form.reset();
+        form.querySelector('#ab-f-status').value = 'available';
         state.editingBookId = null;
         state.selectedTags = [];
         renderTagChips();
@@ -507,6 +509,7 @@
         fd.append('category',    form.querySelector('#ab-f-category').value);
         fd.append('synopsis',    form.querySelector('#ab-f-synopsis').value.trim());
         fd.append('totalCopies', form.querySelector('#ab-f-copies').value || '1');
+        fd.append('status',      form.querySelector('#ab-f-status').value);
         fd.append('tags',        state.selectedTags.join(','));
         if (coverFile) fd.append('coverImage', coverFile);
 

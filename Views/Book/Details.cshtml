@@ -1,5 +1,6 @@
+@model iBorrow.Models.BookDetailsViewModel
 @{
-    ViewData["Title"] = "1984";
+    ViewData["Title"] = Model.Book.Title;
 
     var borrowDate = DateTime.Today;
     var dueDate = borrowDate;
@@ -12,6 +13,9 @@
             businessDaysAdded++;
         }
     }
+
+    var book = Model.Book;
+    var coverUrl = string.IsNullOrWhiteSpace(book.CoverImageUrl) ? "~/images/book-placeholder.svg" : book.CoverImageUrl;
 }
 
 @section Styles {
@@ -23,55 +27,56 @@
     <div class="book-detail-card shadow-sm">
         <div class="book-detail-top">
             <div class="book-cover-wrap">
-                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-cover-img" />
+                <img src="@coverUrl" alt="Book cover of @book.Title" class="book-cover-img" />
             </div>
 
             <div class="book-info">
-                <h1 class="book-title-lg">1984</h1>
-                <p class="book-author-lg">George Orwell</p>
+                <h1 class="book-title-lg">@book.Title</h1>
+                <p class="book-author-lg">@book.Author</p>
 
-                <span class="status-pill status-pill--available">
+                <span class="status-pill @(book.IsAvailable ? "status-pill--available" : "status-pill--unavailable")">
                     <span class="status-pill-dot" aria-hidden="true"></span>
-                    Available
+                    @(book.IsAvailable ? "Available" : "Unavailable")
                 </span>
 
                 <p class="tags-label">Tags:</p>
                 <div class="tag-list">
-                    <span class="tag-pill">Horror</span>
-                    <span class="tag-pill">Comedy</span>
+                    @foreach (var tag in book.Tags)
+                    {
+                        <span class="tag-pill">@tag</span>
+                    }
                 </div>
 
-                <p class="book-description">
-                    George Orwell's 1984 is a dystopian novel set in Oceania, a totalitarian superstate
-                    ruled by "the Party" and their omnipotent leader, Big Brother. It follows Winston
-                    Smith, a low-ranking official who secretly rebels by writing a diary and falling in love,
-                    only to be captured, brutally tortured, and entirely brainwashed by the regime
-                </p>
+                <p class="book-description">@book.Synopsis</p>
             </div>
 
-            <button class="btn borrow-btn" type="button" data-bs-toggle="modal" data-bs-target="#borrowModal">Borrow</button>
+            <button class="btn borrow-btn" type="button" data-bs-toggle="modal" data-bs-target="#borrowModal" @(book.IsAvailable ? "" : "disabled")>Borrow</button>
         </div>
 
-        <h2 class="similar-books-heading">Similar Books</h2>
+        @if (Model.Similar.Count > 0)
+        {
+            <h2 class="similar-books-heading">Similar Books</h2>
 
-        <div class="similar-books-grid">
-            @for (var i = 0; i < 6; i++)
-            {
-                <a class="mini-book-card text-decoration-none text-reset" asp-controller="Book" asp-action="Details" asp-route-id="@i">
-                    <div class="mini-book-cover-wrap">
-                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="mini-book-cover-img" />
-                    </div>
-                    <div class="mini-book-body">
-                        <h3 class="mini-book-title">1984</h3>
-                        <p class="mini-book-author">George Orwell</p>
-                        <span class="mini-status">
-                            <span class="mini-status-dot" aria-hidden="true"></span>
-                            Available
-                        </span>
-                    </div>
-                </a>
-            }
-        </div>
+            <div class="similar-books-grid">
+                @foreach (var similar in Model.Similar)
+                {
+                    var similarCover = string.IsNullOrWhiteSpace(similar.CoverImageUrl) ? "~/images/book-placeholder.svg" : similar.CoverImageUrl;
+                    <a class="mini-book-card text-decoration-none text-reset" asp-controller="Book" asp-action="Details" asp-route-id="@similar.Id">
+                        <div class="mini-book-cover-wrap">
+                            <img src="@similarCover" alt="Book cover of @similar.Title" class="mini-book-cover-img" />
+                        </div>
+                        <div class="mini-book-body">
+                            <h3 class="mini-book-title">@similar.Title</h3>
+                            <p class="mini-book-author">@similar.Author</p>
+                            <span class="mini-status">
+                                <span class="mini-status-dot" aria-hidden="true"></span>
+                                @(similar.IsAvailable ? "Available" : "Unavailable")
+                            </span>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
     </div>
 </div>
 
@@ -92,11 +97,11 @@
                 <div class="borrow-ticket__row">
                     <div class="borrow-ticket__line">
                         <span>Book Title:</span>
-                        <span class="fw-bold">1984</span>
+                        <span class="fw-bold">@book.Title</span>
                     </div>
                     <div class="borrow-ticket__line">
                         <span>Author:</span>
-                        <span class="fw-bold">George Orwell</span>
+                        <span class="fw-bold">@book.Author</span>
                     </div>
                 </div>
 

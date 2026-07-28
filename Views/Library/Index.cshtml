@@ -1,4 +1,4 @@
-@{ViewData["Title"] = "Library";}
+@{ ViewData["Title"] = "Library"; var categories = (IReadOnlyList<string>)ViewBag.Categories; }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/library/hero.css" asp-append-version="true" />
@@ -20,7 +20,7 @@
             <span class="input-group-text bg-white border-0 text-primary-brand">
                 <i class="bi bi-search" aria-hidden="true"></i>
             </span>
-            <input type="text" class="form-control border-0 ps-0" placeholder="Search by title, author, or keyword" aria-label="Search by title, author, or keyword" />
+            <input id="librarySearch" type="text" class="form-control border-0 ps-0" placeholder="Search by title, author, or keyword" aria-label="Search by title, author, or keyword" />
             <button class="btn btn-brand search-btn border-0" type="button">Search</button>
         </div>
 
@@ -38,27 +38,38 @@
             <div class="col-12 col-sm-6 col-md-3">
                 <label class="form-label filter-label" for="categoryFilter">Category</label>
                 <select id="categoryFilter" class="form-select">
-                    <option>All Categories</option>
+                    <option value="">All Categories</option>
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
                 </select>
             </div>
             <div class="col-12 col-sm-6 col-md-3">
                 <label class="form-label filter-label" for="availabilityFilter">Availability</label>
                 <select id="availabilityFilter" class="form-select">
-                    <option>All</option>
-                    <option>Available</option>
-                    <option>Unavailable</option>
+                    <option value="">All</option>
+                    <option value="available">Available</option>
+                    <option value="unavailable">Unavailable</option>
                 </select>
             </div>
             <div class="col-12 col-sm-6 col-md-3">
                 <label class="form-label filter-label" for="courseFilter">Courses</label>
                 <select id="courseFilter" class="form-select">
-                    <option>All Courses</option>
+                    <option value="">All Courses</option>
+                    @foreach (var category in categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
                 </select>
             </div>
             <div class="col-12 col-sm-6 col-md-3">
                 <label class="form-label filter-label" for="sortFilter">Sort by</label>
                 <select id="sortFilter" class="form-select">
-                    <option>Newest First</option>
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="title-asc">Title (A-Z)</option>
+                    <option value="title-desc">Title (Z-A)</option>
                 </select>
             </div>
         </div>
@@ -67,36 +78,12 @@
 
 <h2 class="search-results-heading">Search Results</h2>
 
-<div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 book-grid">
-    @for (var i = 0; i < 10; i++)
-    {
-        var isAvailable = i % 5 != 1;
-        <div class="col">
-            <a class="book-card text-decoration-none text-reset" asp-controller="Book" asp-action="Details" asp-route-id="@i">
-                <div class="book-cover-placeholder"></div>
-                <div class="book-title">1984</div>
-                <div class="book-author">George Orwell</div>
-                <div class="book-status d-flex align-items-center gap-2">
-                    <span class="status-dot @(isAvailable ? "status-available" : "status-unavailable")"></span>
-                    <span class="status-text @(isAvailable ? "text-available" : "text-unavailable")">@(isAvailable ? "Available" : "Unavailable")</span>
-                </div>
-            </a>
-        </div>
-    }
-</div>
+<div id="libraryGrid" class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 book-grid"></div>
 
 <nav aria-label="Search results pages" class="pagination-wrap">
-    <ul class="pagination custom-pagination justify-content-center mb-0">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">&lsaquo;</a>
-        </li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
-        <li class="page-item"><a class="page-link" href="#">69</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">&rsaquo;</a>
-        </li>
-    </ul>
+    <ul id="libraryPagination" class="pagination custom-pagination justify-content-center mb-0"></ul>
 </nav>
+
+@section Scripts {
+    <script src="~/js/library.js" asp-append-version="true"></script>
+}

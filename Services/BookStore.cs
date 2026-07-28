@@ -10,7 +10,7 @@ public sealed class BookStore(AppDbContext db, CirculationStore circulation)
         ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Romance"];
 
     private static readonly List<string> Categories =
-        ["Software Engineering", "Game Development", "Multimedia Arts", "Real Estate", "Filipiniana"];
+        ["Software Engineering", "Game Development", "Multimedia Arts", "Real Estate", "Filipiniana", "Others"];
 
     // ── Queries ──────────────────────────────────────────────────────────────
 
@@ -31,6 +31,8 @@ public sealed class BookStore(AppDbContext db, CirculationStore circulation)
             .ToList();
         return books.Select(b => Enrich(b, activeBorrows)).ToList();
     }
+
+    public BookItemDto? GetById(string id) => GetAll().FirstOrDefault(b => b.Id == id);
 
     /// <summary>Real-time search: matches title, author, category, tags.</summary>
     public IReadOnlyList<BookItemDto> Search(string query, IEnumerable<string>? categories, IEnumerable<string>? tags)
@@ -88,6 +90,7 @@ public sealed class BookStore(AppDbContext db, CirculationStore circulation)
         existing.Synopsis = item.Synopsis;
         existing.Tags = item.Tags;
         existing.TotalCopies = Math.Max(item.TotalCopies, 1);
+        existing.IsManuallyUnavailable = item.IsManuallyUnavailable;
         if (!string.IsNullOrWhiteSpace(item.CoverImageUrl))
         {
             existing.CoverImageUrl = item.CoverImageUrl;
@@ -126,7 +129,8 @@ public sealed class BookStore(AppDbContext db, CirculationStore circulation)
             Id = b.Id, Title = b.Title, Author = b.Author, Category = b.Category,
             Tags = b.Tags, Synopsis = b.Synopsis, CoverImageUrl = b.CoverImageUrl,
             TotalCopies = b.TotalCopies, DateAdded = b.DateAdded,
-            IsAvailable = borrowed < b.TotalCopies
+            IsManuallyUnavailable = b.IsManuallyUnavailable,
+            IsAvailable = !b.IsManuallyUnavailable && borrowed < b.TotalCopies
         };
     }
 

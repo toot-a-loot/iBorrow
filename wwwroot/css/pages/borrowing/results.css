@@ -41,6 +41,7 @@
 }
 
 .book-card {
+    position: relative;
     background: var(--color-white);
     border: 1px solid var(--borrow-color-border);
     border-radius: var(--borrow-radius-md);

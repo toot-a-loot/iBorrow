@@ -64,7 +64,7 @@
     {
         var isAvailable = i % 5 != 1;
         <div class="col">
-            <div class="book-card">
+            <a class="book-card text-decoration-none text-reset" asp-controller="Book" asp-action="Details" asp-route-id="@i">
                 <div class="book-cover-placeholder"></div>
                 <div class="book-title">1984</div>
                 <div class="book-author">George Orwell</div>
@@ -72,7 +72,7 @@
                     <span class="status-dot @(isAvailable ? "status-available" : "status-unavailable")"></span>
                     <span class="status-text @(isAvailable ? "text-available" : "text-unavailable")">@(isAvailable ? "Available" : "Unavailable")</span>
                 </div>
-            </div>
+            </a>
         </div>
     }
 </div>

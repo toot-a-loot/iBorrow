@@ -1,0 +1,142 @@
+@{
+    ViewData["Title"] = "1984";
+
+    var borrowDate = DateTime.Today;
+    var dueDate = borrowDate;
+    var businessDaysAdded = 0;
+    while (businessDaysAdded < 7)
+    {
+        dueDate = dueDate.AddDays(1);
+        if (dueDate.DayOfWeek != DayOfWeek.Saturday && dueDate.DayOfWeek != DayOfWeek.Sunday)
+        {
+            businessDaysAdded++;
+        }
+    }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/book/details.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/book/borrow-modal.css" asp-append-version="true" />
+}
+
+<div class="book-page">
+    <div class="book-detail-card shadow-sm">
+        <div class="book-detail-top">
+            <div class="book-cover-wrap">
+                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-cover-img" />
+            </div>
+
+            <div class="book-info">
+                <h1 class="book-title-lg">1984</h1>
+                <p class="book-author-lg">George Orwell</p>
+
+                <span class="status-pill status-pill--available">
+                    <span class="status-pill-dot" aria-hidden="true"></span>
+                    Available
+                </span>
+
+                <p class="tags-label">Tags:</p>
+                <div class="tag-list">
+                    <span class="tag-pill">Horror</span>
+                    <span class="tag-pill">Comedy</span>
+                </div>
+
+                <p class="book-description">
+                    George Orwell's 1984 is a dystopian novel set in Oceania, a totalitarian superstate
+                    ruled by "the Party" and their omnipotent leader, Big Brother. It follows Winston
+                    Smith, a low-ranking official who secretly rebels by writing a diary and falling in love,
+                    only to be captured, brutally tortured, and entirely brainwashed by the regime
+                </p>
+            </div>
+
+            <button class="btn borrow-btn" type="button" data-bs-toggle="modal" data-bs-target="#borrowModal">Borrow</button>
+        </div>
+
+        <h2 class="similar-books-heading">Similar Books</h2>
+
+        <div class="similar-books-grid">
+            @for (var i = 0; i < 6; i++)
+            {
+                <a class="mini-book-card text-decoration-none text-reset" asp-controller="Book" asp-action="Details" asp-route-id="@i">
+                    <div class="mini-book-cover-wrap">
+                        <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="mini-book-cover-img" />
+                    </div>
+                    <div class="mini-book-body">
+                        <h3 class="mini-book-title">1984</h3>
+                        <p class="mini-book-author">George Orwell</p>
+                        <span class="mini-status">
+                            <span class="mini-status-dot" aria-hidden="true"></span>
+                            Available
+                        </span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered borrow-modal-dialog">
+        <div class="modal-content borrow-modal-content">
+            <div class="borrow-modal-brand">
+                <img src="~/images/iborrowLogo.svg" asp-append-version="true" alt="iBorrow logo" class="borrow-modal-logo" />
+                <span class="borrow-modal-brand-text">
+                    <span class="borrow-modal-brand-name">iBorrow</span>
+                    <span class="borrow-modal-brand-sub">Library System</span>
+                </span>
+            </div>
+
+            <div class="borrow-ticket">
+                <div class="borrow-ticket__header" id="borrowModalLabel">Ready for Reservation</div>
+
+                <div class="borrow-ticket__row">
+                    <div class="borrow-ticket__line">
+                        <span>Book Title:</span>
+                        <span class="fw-bold">1984</span>
+                    </div>
+                    <div class="borrow-ticket__line">
+                        <span>Author:</span>
+                        <span class="fw-bold">George Orwell</span>
+                    </div>
+                </div>
+
+                <hr class="borrow-ticket__divider" />
+
+                <div class="borrow-ticket__row">
+                    <div class="borrow-ticket__line">
+                        <span>Borrow Date:</span>
+                        <span class="fw-bold">@borrowDate.ToString("MM/dd/yy")</span>
+                    </div>
+                    <div class="borrow-ticket__line">
+                        <span>Due Date:</span>
+                        <span class="fw-bold">@dueDate.ToString("MM/dd/yy")</span>
+                    </div>
+                </div>
+
+                <div class="borrow-ticket__notice">
+                    <div class="borrow-ticket__notice-top">
+                        <i class="bi bi-shield-fill-exclamation borrow-ticket__notice-icon" aria-hidden="true"></i>
+                        <div>
+                            <p class="borrow-ticket__notice-title">Please take care of the book</p>
+                            <p class="borrow-ticket__notice-text">Late returns and damaging the book may result in penalties. Thank you for helping us keep our library in great condition.</p>
+                        </div>
+                    </div>
+                    <hr class="borrow-ticket__notice-divider" />
+                    <a href="#" class="borrow-ticket__terms">
+                        <span><i class="bi bi-file-earmark-text-fill" aria-hidden="true"></i> Terms and Conditions</span>
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <div class="borrow-ticket__actions">
+                    <button type="button" class="btn borrow-ticket__cancel-btn" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn borrow-ticket__borrow-btn" data-bs-dismiss="modal">
+                        <i class="bi bi-bookmark-fill" aria-hidden="true"></i> Borrow Now
+                    </button>
+                </div>
+
+                <p class="borrow-ticket__footer">For questions or issues. <a href="#">Contact Us</a></p>
+            </div>
+        </div>
+    </div>
+</div>

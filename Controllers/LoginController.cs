@@ -1,19 +1,24 @@
 using System.Security.Claims;
+using iBorrow.Data;
 using iBorrow.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace iBorrow.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController(UserManager<ApplicationUser> userManager, AppDbContext db) : Controller
     {
-        private const string HardcodedEmail = "user@test.com";
-        private const string HardcodedPassword = "password";
-
         [HttpGet]
         public IActionResult Index()
         {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.SuccessMessage = TempData["SuccessMessage"];
             return View(new LoginViewModel());
         }
 
@@ -26,16 +31,20 @@ namespace iBorrow.Controllers
                 return View(model);
             }
 
-            if (model.Email != HardcodedEmail || model.Password != HardcodedPassword)
+            var user = await userManager.FindByEmailAsync(model.Email);
+            if (user is null || !await userManager.CheckPasswordAsync(user, model.Password) ||
+                !await userManager.IsInRoleAsync(user, DbSeeder.StudentRole))
             {
                 ModelState.AddModelError(string.Empty, "Invalid email or password.");
                 return View(model);
             }
 
+            var displayName = db.Borrowers.FirstOrDefault(b => b.UserId == user.Id)?.Name ?? model.Email.Split('@')[0];
             var claims = new List<Claim>
             {
                 new(ClaimTypes.Name, model.Email),
-                new(AccountController.DisplayNameClaimType, model.Email.Split('@')[0]),
+                new(ClaimTypes.NameIdentifier, user.Id),
+                new(AccountController.DisplayNameClaimType, displayName),
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));

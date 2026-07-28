@@ -18,20 +18,8 @@ public class AdminBorrowersController(CirculationStore store) : Controller
     public IActionResult Overview() => Json(store.GetBorrowerOverview(DateOnly.FromDateTime(DateTime.Today)));
 
     [HttpPost]
-    public IActionResult Add([FromBody] BorrowerProfile item) => IsValid(item) ? Json(store.AddBorrower(item)) : BadRequest("Name must use the format Lastname, Firstname.");
+    public IActionResult Add([FromBody] BorrowerProfile item) => BorrowerValidation.IsValid(item) ? Json(store.AddBorrower(item)) : BadRequest("Name must use the format Lastname, Firstname.");
 
     [HttpPut]
-    public IActionResult Edit(string id, [FromBody] BorrowerProfile item) => IsValid(item) && store.UpdateBorrower(id, item) ? NoContent() : BadRequest("Invalid borrower details.");
-
-    private static bool IsValid(BorrowerProfile item) =>
-        !string.IsNullOrWhiteSpace(item.StudentId) && !string.IsNullOrWhiteSpace(item.Name) &&
-        item.Name.Count(c => c == ',') == 1 && item.Name.Split(',', 2).All(part => !string.IsNullOrWhiteSpace(part)) &&
-        !string.IsNullOrWhiteSpace(item.ContactNo) && !string.IsNullOrWhiteSpace(item.Email) &&
-        IsEmail(item.Email);
-
-    private static bool IsEmail(string email)
-    {
-        try { return new System.Net.Mail.MailAddress(email).Address == email; }
-        catch (FormatException) { return false; }
-    }
+    public IActionResult Edit(string id, [FromBody] BorrowerProfile item) => BorrowerValidation.IsValid(item) && store.UpdateBorrower(id, item) ? NoContent() : BadRequest("Invalid borrower details.");
 }

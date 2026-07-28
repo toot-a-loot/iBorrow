@@ -7,6 +7,7 @@
     --borrow-color-text-muted: #6B7280;
     --borrow-color-available: #22C55E;
     --borrow-color-unavailable: #EF4444;
+    --borrow-color-warning: #F59E0B;
     --borrow-color-overlay: rgba(0, 0, 0, 0.52);
 
     --borrow-radius-sm: 6px;

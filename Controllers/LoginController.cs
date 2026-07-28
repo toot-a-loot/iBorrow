@@ -32,7 +32,11 @@ namespace iBorrow.Controllers
                 return View(model);
             }
 
-            var claims = new List<Claim> { new(ClaimTypes.Name, model.Email) };
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Name, model.Email),
+                new(AccountController.DisplayNameClaimType, model.Email.Split('@')[0]),
+            };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 

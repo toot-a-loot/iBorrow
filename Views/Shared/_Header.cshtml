@@ -17,7 +17,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="siteNav">
-            <ul class="navbar-nav mx-md-auto gap-md-4 mt-3 mt-md-0">
+            <ul class="navbar-nav header-center-nav gap-md-4 mt-3 mt-md-0">
                 <li class="nav-item">
                     <a class="nav-link brand-nav-link @(currentController == "Home" ? "active" : "")" aria-current="@(currentController == "Home" ? "page" : null)" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
@@ -29,21 +29,43 @@
                 </li>
             </ul>
 
-            <div class="dropdown account-menu mt-3 mt-md-0">
-                <button class="account-menu__toggle" type="button" id="accountMenuToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">
-                    <img src="~/images/userIcon.svg" alt="" class="account-menu__icon" aria-hidden="true" />
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end account-menu__list" aria-labelledby="accountMenuToggle">
-                    <li>
-                        <button type="button" class="dropdown-item account-menu__item">Account</button>
-                    </li>
-                    <li>
-                        <form asp-area="" asp-controller="Login" asp-action="Logout" method="post">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="dropdown-item account-menu__item">Sign out</button>
-                        </form>
-                    </li>
-                </ul>
+            <div class="header-actions mt-3 mt-md-0">
+                <div class="dropdown notification-menu">
+                    <button class="notification-btn" type="button" id="notificationMenuToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                        <i class="bi bi-bell" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end notification-menu__panel" aria-labelledby="notificationMenuToggle">
+                        <div class="notification-menu__header">Notifications</div>
+                        <ul class="notification-menu__list">
+                            @foreach (var item in iBorrow.Services.NotificationsStore.GetPreview())
+                            {
+                                <li class="notification-menu__item @(item.IsUnread ? "is-unread" : "")">
+                                    <span class="notification-menu__item-title">@item.Title</span>
+                                    <span class="notification-menu__item-message">@item.Message</span>
+                                    <span class="notification-menu__item-time">@item.TimeAgo</span>
+                                </li>
+                            }
+                        </ul>
+                        <a class="notification-menu__view-all" asp-area="" asp-controller="Notifications" asp-action="Index">View all notifications</a>
+                    </div>
+                </div>
+
+                <div class="dropdown account-menu">
+                    <button class="account-menu__toggle" type="button" id="accountMenuToggle" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">
+                        <img src="~/images/userIcon.svg" alt="" class="account-menu__icon" aria-hidden="true" />
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end account-menu__list" aria-labelledby="accountMenuToggle">
+                        <li>
+                            <a class="dropdown-item account-menu__item" asp-area="" asp-controller="Account" asp-action="Index">Account</a>
+                        </li>
+                        <li>
+                            <form asp-area="" asp-controller="Login" asp-action="Logout" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="dropdown-item account-menu__item">Sign out</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

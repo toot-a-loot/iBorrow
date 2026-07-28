@@ -41,6 +41,117 @@
   color: var(--color-white);
 }
 
+.site-header .container {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .header-center-nav {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 !important;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.notification-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-black);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.notification-btn:hover,
+.notification-btn:focus-visible {
+  background: #eef0ff;
+  color: var(--color-primary);
+}
+
+.notification-menu__panel {
+  min-width: 320px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.notification-menu__header {
+  padding: 0.85rem 1.1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.notification-menu__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification-menu__item:last-child {
+  border-bottom: none;
+}
+
+.notification-menu__item.is-unread {
+  background: #f5f7ff;
+}
+
+.notification-menu__item-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-black);
+}
+
+.notification-menu__item-message {
+  font-size: 0.8rem;
+  color: var(--color-gray);
+}
+
+.notification-menu__item-time {
+  font-size: 0.72rem;
+  color: var(--color-gray);
+}
+
+.notification-menu__view-all {
+  display: block;
+  text-align: center;
+  padding: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.notification-menu__view-all:hover {
+  background: #eef0ff;
+}
+
 .account-menu__toggle {
   display: flex;
   align-items: center;

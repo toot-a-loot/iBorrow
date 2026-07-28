@@ -26,13 +26,19 @@
     </span>
 
     <div class="home-hero__content">
-        <h1 class="home-hero__heading">Borrow Books.</h1>
+        <h1 class="home-hero__heading">Borrow Books. <span class="home-hero__heading-accent">Expand</span> Knowledge.</h1>
         <p class="home-hero__subtitle">
             iBorrow is a digital library management system exclusively for iACADEMY students.
             Easily browse available books, borrow and reserve books,
             and manage due dates all through a simple and convenient platform designed to make
             accessing library resources faster and more efficient.
         </p>
+
+        <form class="home-hero__search" role="search" aria-label="Search books" method="get" action="">
+            <i class="bi bi-search home-hero__search-icon" aria-hidden="true"></i>
+            <input type="search" name="search" class="home-hero__search-input" placeholder="Search for books, authors, or topics..." aria-label="Search for books, authors, or topics" />
+            <button type="submit" class="home-hero__search-btn">Search</button>
+        </form>
     </div>
 </section>
 

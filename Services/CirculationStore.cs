@@ -29,6 +29,49 @@ public sealed class CirculationStore
         lock (_sync) return _borrowers.ToList();
     }
 
+    public IReadOnlyList<BorrowerOverview> GetBorrowerOverview(DateOnly today)
+    {
+        lock (_sync)
+        {
+            return _borrowed
+                .Where(item => !string.Equals(item.Status, "Returned", StringComparison.OrdinalIgnoreCase))
+                .GroupBy(item => item.BorrowerId)
+                .Select(group =>
+                {
+                    var profile = _borrowers.FirstOrDefault(item => item.StudentId == group.Key || item.LibraryId == group.Key);
+                    var loans = group.ToList();
+                    var dueDates = loans.Select(item => DueDateFor(item)).ToList();
+                    var dueDate = dueDates.Min();
+                    var borrowedDate = loans.Select(item => ParseDate(item.DateBorrowed)).Min();
+                    var daysRemaining = dueDate.DayNumber - today.DayNumber;
+                    var status = daysRemaining < 0 ? "Overdue" : daysRemaining == 1 ? "Nearly Due" : "Normal";
+                    return new BorrowerOverview
+                    {
+                        LibraryId = profile?.LibraryId ?? loans[0].Id,
+                        Name = profile?.Name ?? loans[0].BorrowerName,
+                        StudentId = profile?.StudentId ?? loans[0].BorrowerId,
+                        Course = profile?.Course ?? string.Empty,
+                        BorrowedBooks = loans.Sum(item => Math.Max(item.Copies, 1)),
+                        BookTitles = loans.Select(item => item.Book).Where(item => !string.IsNullOrWhiteSpace(item)).Distinct().ToList(),
+                        Status = status,
+                        DueDate = dueDate.ToString("yyyy-MM-dd"),
+                        DateBorrowed = borrowedDate.ToString("yyyy-MM-dd"),
+                        DaysRemaining = daysRemaining
+                    };
+                })
+                .OrderBy(item => item.Status == "Normal" ? 1 : 0)
+                .ThenBy(item => item.Status == "Overdue" ? item.DaysRemaining : int.MaxValue)
+                .ThenBy(item => item.DaysRemaining)
+                .ToList();
+        }
+    }
+
+    private static DateOnly DueDateFor(BorrowedBook item) =>
+        TryParseDate(item.DueDate, out var dueDate) ? dueDate : ParseDate(item.DateBorrowed).AddDays(7);
+
+    private static DateOnly ParseDate(string value) => TryParseDate(value, out var date) ? date : DateOnly.FromDateTime(DateTime.Today);
+    private static bool TryParseDate(string value, out DateOnly date) => DateOnly.TryParse(value, out date);
+
     public BorrowerProfile AddBorrower(BorrowerProfile item)
     {
         lock (_sync)
@@ -47,7 +90,7 @@ public sealed class CirculationStore
         {
             var current = _borrowers.FirstOrDefault(x => x.LibraryId == id);
             if (current is null) return false;
-            current.StudentId = item.StudentId; current.Name = NormalizeName(item.Name);
+            current.StudentId = item.StudentId; current.Name = NormalizeName(item.Name); current.Course = item.Course;
             current.ContactNo = item.ContactNo; current.Email = item.Email;
             Save();
             return true;

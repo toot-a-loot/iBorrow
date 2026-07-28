@@ -9,9 +9,13 @@ namespace iBorrow.Controllers;
 public class AdminBorrowersController(CirculationStore store) : Controller
 {
     public IActionResult Index() => View();
+    public IActionResult Profile() => View();
 
     [HttpGet]
     public IActionResult Data() => Json(store.GetBorrowers());
+
+    [HttpGet]
+    public IActionResult Overview() => Json(store.GetBorrowerOverview(DateOnly.FromDateTime(DateTime.Today)));
 
     [HttpPost]
     public IActionResult Add([FromBody] BorrowerProfile item) => IsValid(item) ? Json(store.AddBorrower(item)) : BadRequest("Name must use the format Lastname, Firstname.");

@@ -1,6 +1,6 @@
 (function () {
     const endpoint = '/AdminBorrowers';
-    const columns = [['LibraryId', 'Library ID'], ['StudentId', 'Student ID'], ['Name', 'Name'], ['ContactNo', 'Contact No.'], ['Email', 'Email']];
+    const columns = [['LibraryId', 'Library ID'], ['StudentId', 'Student ID'], ['Name', 'Name'], ['Course', 'Course'], ['ContactNo', 'Contact No.'], ['Email', 'Email']];
     const state = { rows: [], edit: null, query: '', page: 1, size: 10, sort: null };
     const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const isNew = row => row && row.__new;
@@ -24,12 +24,12 @@
         const head = columns.map(([key, label]) => `<th>${label}<button class="sort-button" data-sort="${key}" aria-label="Sort by ${label}"><i class="bi bi-caret-up"></i><i class="bi bi-caret-down"></i></button></th>`).join('');
         const renderedRows = pageRows.map(row => row.__new || state.edit === row.LibraryId ? editRow(row) : normalRow(row)).join('');
         const hasSavedRows = state.rows.some(row => !row.__new);
-        const emptyRow = (!pageRows.length || !hasSavedRows) ? `<tr><td colspan="6" class="empty-cell">No Entries Found</td></tr>` : '';
+        const emptyRow = (!pageRows.length || !hasSavedRows) ? `<tr><td colspan="${columns.length + 1}" class="empty-cell">No Entries Found</td></tr>` : '';
         const body = renderedRows + emptyRow;
         document.getElementById('borrowers-table').innerHTML = `${toolbar}<div class="admin-table-wrap"><table class="admin-data-table"><thead><tr>${head}<th>Actions</th></tr></thead><tbody>${body}</tbody></table></div><div class="table-footer"><span>Showing ${rows.length ? ((state.page - 1) * state.size + 1) : 0} to ${Math.min(state.page * state.size, rows.length)} of ${rows.length} entries</span><div class="pagination"><button data-page="prev" ${state.page === 1 ? 'disabled' : ''}>Previous</button>${Array.from({ length: pages }, (_, i) => `<button data-page="${i + 1}" class="${state.page === i + 1 ? 'active' : ''}">${i + 1}</button>`).join('')}<button data-page="next" ${state.page === pages ? 'disabled' : ''}>Next</button></div></div>`;
     }
     function editRow(row) {
-        return `<tr data-id="${escapeHtml(row.LibraryId)}"><td>${escapeHtml(row.LibraryId || 'Generated on save')}</td><td>${input('StudentId', row.StudentId)}</td><td>${input('Name', row.Name)}<span class="validation-message" data-name-error>Use Lastname, Firstname.</span></td><td>${input('ContactNo', row.ContactNo, 'tel')}</td><td>${input('Email', row.Email, 'email')}</td><td class="actions"><button class="admin-action-button" data-action="save" ${isNew(row) ? 'disabled' : ''}>${isNew(row) ? 'Enter' : 'Save'}</button>${!isNew(row) ? '<button class="admin-action-button" data-action="cancel">Cancel</button>' : ''}</td></tr>`;
+        return `<tr data-id="${escapeHtml(row.LibraryId)}"><td>${escapeHtml(row.LibraryId || 'Generated on save')}</td><td>${input('StudentId', row.StudentId)}</td><td>${input('Name', row.Name)}<span class="validation-message" data-name-error>Use Lastname, Firstname.</span></td><td>${input('Course', row.Course)}</td><td>${input('ContactNo', row.ContactNo, 'tel')}</td><td>${input('Email', row.Email, 'email')}</td><td class="actions"><button class="admin-action-button" data-action="save" ${isNew(row) ? 'disabled' : ''}>${isNew(row) ? 'Enter' : 'Save'}</button>${!isNew(row) ? '<button class="admin-action-button" data-action="cancel">Cancel</button>' : ''}</td></tr>`;
     }
     function normalRow(row) { return `<tr data-id="${escapeHtml(row.LibraryId)}">${columns.map(([key]) => `<td>${escapeHtml(row[key])}</td>`).join('')}<td class="actions"><button class="admin-action-button" data-action="edit" data-id="${escapeHtml(row.LibraryId)}">Edit</button></td></tr>`; }
     function values(row) { const result = { ...row }; document.querySelector(`tr[data-id="${CSS.escape(row.LibraryId)}"]`).querySelectorAll('[data-field]').forEach(field => result[field.dataset.field] = field.value.trim()); return result; }

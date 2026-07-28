@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using iBorrow.Models;
+using iBorrow.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +9,12 @@ namespace iBorrow.Controllers
 {
     public class LoginController : Controller
     {
-        private const string HardcodedEmail = "user@test.com";
-        private const string HardcodedPassword = "password";
+        private readonly AuthService _authService;
+
+        public LoginController(AuthService authService)
+        {
+            _authService = authService;
+        }
 
         [HttpGet]
         public IActionResult Index()
@@ -26,7 +31,8 @@ namespace iBorrow.Controllers
                 return View(model);
             }
 
-            if (model.Email != HardcodedEmail || model.Password != HardcodedPassword)
+            var user = await _authService.ValidateCredentialsAsync(model.Email, model.Password);
+            if (user is null)
             {
                 ModelState.AddModelError(string.Empty, "Invalid email or password.");
                 return View(model);
@@ -34,8 +40,8 @@ namespace iBorrow.Controllers
 
             var claims = new List<Claim>
             {
-                new(ClaimTypes.Name, model.Email),
-                new(AccountController.DisplayNameClaimType, model.Email.Split('@')[0]),
+                new(ClaimTypes.Name, user.Email),
+                new(AccountController.DisplayNameClaimType, user.Email.Split('@')[0]),
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));

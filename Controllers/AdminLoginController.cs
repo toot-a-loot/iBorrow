@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using iBorrow.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +8,12 @@ namespace iBorrow.Controllers
 {
     public class AdminLoginController : Controller
     {
-        private const string HardcodedEmail = "user@test.com";
-        private const string HardcodedPassword = "password";
+        private readonly AuthService _authService;
+
+        public AdminLoginController(AuthService authService)
+        {
+            _authService = authService;
+        }
 
         [HttpGet]
         public IActionResult Index()
@@ -20,13 +25,14 @@ namespace iBorrow.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(string email, string password)
         {
-            if (email != HardcodedEmail || password != HardcodedPassword)
+            var user = await _authService.ValidateCredentialsAsync(email, password);
+            if (user is null || !user.IsAdmin)
             {
                 ViewBag.ErrorMessage = "Invalid email or password.";
                 return View();
             }
 
-            var claims = new List<Claim> { new(ClaimTypes.Name, email) };
+            var claims = new List<Claim> { new(ClaimTypes.Name, user.Email) };
             var identity = new ClaimsIdentity(claims, AuthSchemes.Admin);
             await HttpContext.SignInAsync(AuthSchemes.Admin, new ClaimsPrincipal(identity));
 

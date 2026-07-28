@@ -41,7 +41,6 @@ public sealed class CirculationStore(AppDbContext db)
                     LibraryId = profile?.LibraryId ?? loanList[0].Id,
                     Name = profile?.Name ?? loanList[0].BorrowerName,
                     StudentId = profile?.StudentId ?? loanList[0].BorrowerId,
-                    Course = profile?.Course ?? string.Empty,
                     BorrowedBooks = loanList.Sum(item => Math.Max(item.Copies, 1)),
                     BookTitles = loanList.Select(item => item.Book).Where(item => !string.IsNullOrWhiteSpace(item)).Distinct().ToList(),
                     Status = status,
@@ -75,8 +74,16 @@ public sealed class CirculationStore(AppDbContext db)
     {
         var current = db.Borrowers.FirstOrDefault(x => x.LibraryId == id);
         if (current is null) return false;
-        current.StudentId = item.StudentId; current.Name = NormalizeName(item.Name); current.Course = item.Course;
-        current.ContactNo = item.ContactNo; current.Email = item.Email;
+        current.StudentId = item.StudentId; current.Name = NormalizeName(item.Name); current.Email = item.Email;
+        db.SaveChanges();
+        return true;
+    }
+
+    public bool DeleteBorrower(string id)
+    {
+        var current = db.Borrowers.FirstOrDefault(x => x.LibraryId == id);
+        if (current is null) return false;
+        db.Borrowers.Remove(current);
         db.SaveChanges();
         return true;
     }

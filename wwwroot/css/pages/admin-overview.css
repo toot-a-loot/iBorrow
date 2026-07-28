@@ -34,6 +34,7 @@
   box-shadow: 0 1px 2px rgba(20, 24, 63, .04);
   color: #1b1f2e;
   text-decoration: none;
+  cursor: pointer;
   font: 12px var(--font-base, 'Poppins', sans-serif);
   transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
 }

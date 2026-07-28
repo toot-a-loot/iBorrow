@@ -23,4 +23,6 @@ public class BookDetailsViewModel
 {
     public BookItemDto Book { get; set; } = new();
     public List<BookItemDto> Similar { get; set; } = [];
+    public DateTime BorrowDate { get; set; }
+    public DateTime DueDate { get; set; }
 }

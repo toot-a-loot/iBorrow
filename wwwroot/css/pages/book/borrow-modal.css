@@ -76,6 +76,20 @@
   opacity: 1;
 }
 
+.borrow-ticket__fee-note {
+  font-size: 0.8rem;
+  color: #b91c1c;
+  font-weight: 600;
+  padding: 0 var(--spacing-lg);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.is-disabled {
+  pointer-events: none;
+  opacity: 0.55;
+  color: var(--color-gray) !important;
+}
+
 .borrow-ticket__notice {
   background: #eef0ff;
   border: 1px solid #d9deff;

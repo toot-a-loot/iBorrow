@@ -19,4 +19,24 @@
     </main>
 </div>
 
+<div class="modal fade" id="borrowerDetailModal" tabindex="-1" aria-labelledby="borrowerDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="borrowerDetailLabel">Borrower Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="borrower-detail-info">
+                    <p><strong>Name:</strong> <span id="bd-name"></span></p>
+                    <p><strong>Student ID:</strong> <span id="bd-studentid"></span></p>
+                    <p><strong>Email:</strong> <span id="bd-email"></span></p>
+                </div>
+                <h6 class="mt-3">Borrowed Books</h6>
+                <div id="bd-loans"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts { <script src="~/js/admin-overview.js" asp-append-version="true"></script> }

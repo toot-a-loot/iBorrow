@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace iBorrow.Controllers;
 
 [Authorize(AuthenticationSchemes = AuthSchemes.Admin)]
-public class AdminBorrowersController(CirculationStore store, UserManager<ApplicationUser> userManager) : Controller
+public class AdminBorrowersController(CirculationStore store, BookStore books, UserManager<ApplicationUser> userManager) : Controller
 {
     public IActionResult Index() => View();
     public IActionResult Profile() => View();
@@ -17,7 +17,30 @@ public class AdminBorrowersController(CirculationStore store, UserManager<Applic
     public IActionResult Data() => Json(store.GetBorrowers());
 
     [HttpGet]
-    public IActionResult Overview() => Json(store.GetBorrowerOverview(DateOnly.FromDateTime(DateTime.Today)));
+    public IActionResult Overview()
+    {
+        var overview = store.GetBorrowerOverview(DateOnly.FromDateTime(DateTime.Today));
+        foreach (var item in overview)
+        {
+            item.BookTitles = item.BookTitles.Select(t => books.GetById(t)?.Title ?? t).ToList();
+        }
+        return Json(overview);
+    }
+
+    [HttpGet]
+    public IActionResult Detail(string studentId)
+    {
+        var detail = store.GetBorrowerDetail(studentId);
+        if (detail is null) return NotFound();
+
+        foreach (var loan in detail.Loans)
+        {
+            var book = books.GetById(loan.Book);
+            if (book != null) loan.Book = book.Title;
+        }
+
+        return Json(detail);
+    }
 
     [HttpPost]
     public IActionResult Add([FromBody] BorrowerProfile item) => BorrowerValidation.IsValid(item) ? Json(store.AddBorrower(item)) : BadRequest("Enter a name, student ID, and valid email.");

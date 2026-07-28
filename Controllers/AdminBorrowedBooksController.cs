@@ -11,7 +11,11 @@ public class AdminBorrowedBooksController(CirculationStore store) : Controller
     public IActionResult Index() => View();
 
     [HttpGet]
-    public IActionResult Data() => Json(store.GetAll());
+    public IActionResult Data()
+    {
+        var (borrowed, returned) = store.GetAll();
+        return Json(new { borrowed, returned });
+    }
 
     [HttpPost]
     public IActionResult AddBorrowed([FromBody] BorrowedBook item) => Json(store.AddBorrowed(item));

@@ -76,6 +76,15 @@
   display: inline-block;
 }
 
+.status-pill--unavailable {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-pill--unavailable .status-pill-dot {
+  background: #b91c1c;
+}
+
 .tags-label {
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
@@ -119,6 +128,12 @@
 .borrow-btn:hover {
   background: var(--color-primary-dark);
   color: var(--color-white);
+}
+
+.borrow-btn:disabled {
+  background: #c7cbd3;
+  color: #6b7280;
+  cursor: not-allowed;
 }
 
 .similar-books-heading {
@@ -188,6 +203,14 @@
   border-radius: 50%;
   background: #1e9e50;
   display: inline-block;
+}
+
+.mini-status--unavailable {
+  color: #b91c1c;
+}
+
+.mini-status--unavailable .mini-status-dot {
+  background: #b91c1c;
 }
 
 @media (max-width: 1200px) {

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<iBorrow.Services.CirculationStore>();
-builder.Services.AddSingleton<iBorrow.Services.BookStore>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

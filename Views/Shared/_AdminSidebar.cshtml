@@ -9,7 +9,7 @@
         <a class="admin-sidebar__link @(controller == "AdminBorrowers" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "is-active" : "")" asp-controller="AdminBorrowers" asp-action="Index" aria-current="@(controller == "AdminBorrowers" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "page" : null)"><i class="bi bi-grid" aria-hidden="true"></i><span>Borrowers Overview</span></a>
         <a class="admin-sidebar__link @(controller == "AdminBorrowers" && ViewContext.RouteData.Values["action"]?.ToString() == "Profile" ? "is-active" : "")" asp-controller="AdminBorrowers" asp-action="Profile"><i class="bi bi-person-fill" aria-hidden="true"></i><span>Students Profile</span></a>
         <a class="admin-sidebar__link @(controller == "Library" ? "is-active" : "")" asp-controller="Library" asp-action="Index"><i class="bi bi-layers" aria-hidden="true"></i><span>Books</span></a>
-        <a class="admin-sidebar__link @(controller == "AdminBorrowedBooks" ? "is-active" : "")" asp-controller="AdminBorrowedBooks" asp-action="Index"><i class="bi bi-journal-plus" aria-hidden="true"></i><span>Add Books</span></a>
+        <a class="admin-sidebar__link @(controller == "AdminAddBooks" ? "is-active" : "")" asp-controller="AdminAddBooks" asp-action="Index"><i class="bi bi-book" aria-hidden="true"></i><span>Add Books</span></a>
         <form class="admin-sidebar__logout-form" asp-controller="AdminLogin" asp-action="Logout" method="post">
             @Html.AntiForgeryToken()
             <button type="submit" class="admin-sidebar__link admin-sidebar__logout"><i class="bi bi-box-arrow-left" aria-hidden="true"></i><span>Logout</span></button>

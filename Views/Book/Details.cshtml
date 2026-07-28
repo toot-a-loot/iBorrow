@@ -2,18 +2,6 @@
 @{
     ViewData["Title"] = Model.Book.Title;
 
-    var borrowDate = DateTime.Today;
-    var dueDate = borrowDate;
-    var businessDaysAdded = 0;
-    while (businessDaysAdded < 7)
-    {
-        dueDate = dueDate.AddDays(1);
-        if (dueDate.DayOfWeek != DayOfWeek.Saturday && dueDate.DayOfWeek != DayOfWeek.Sunday)
-        {
-            businessDaysAdded++;
-        }
-    }
-
     var book = Model.Book;
     var coverUrl = string.IsNullOrWhiteSpace(book.CoverImageUrl) ? "~/images/book-placeholder.svg" : book.CoverImageUrl;
 }
@@ -50,7 +38,7 @@
                 <p class="book-description">@book.Synopsis</p>
             </div>
 
-            <button class="btn borrow-btn" type="button" data-bs-toggle="modal" data-bs-target="#borrowModal" @(book.IsAvailable ? "" : "disabled")>Borrow</button>
+            <button id="openBorrowModalBtn" class="btn borrow-btn" type="button" data-bs-toggle="modal" data-bs-target="#borrowModal" @(book.IsAvailable ? "" : "disabled")>Borrow</button>
         </div>
 
         @if (Model.Similar.Count > 0)
@@ -68,7 +56,7 @@
                         <div class="mini-book-body">
                             <h3 class="mini-book-title">@similar.Title</h3>
                             <p class="mini-book-author">@similar.Author</p>
-                            <span class="mini-status">
+                            <span class="mini-status @(similar.IsAvailable ? "" : "mini-status--unavailable")">
                                 <span class="mini-status-dot" aria-hidden="true"></span>
                                 @(similar.IsAvailable ? "Available" : "Unavailable")
                             </span>
@@ -79,6 +67,8 @@
         }
     </div>
 </div>
+
+@Html.AntiForgeryToken()
 
 <div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered borrow-modal-dialog">
@@ -110,13 +100,15 @@
                 <div class="borrow-ticket__row">
                     <div class="borrow-ticket__line">
                         <span>Borrow Date:</span>
-                        <span class="fw-bold">@borrowDate.ToString("MM/dd/yy")</span>
+                        <span class="fw-bold">@Model.BorrowDate.ToString("MM/dd/yy")</span>
                     </div>
                     <div class="borrow-ticket__line">
                         <span>Due Date:</span>
-                        <span class="fw-bold">@dueDate.ToString("MM/dd/yy")</span>
+                        <span class="fw-bold">@Model.DueDate.ToString("MM/dd/yy")</span>
                     </div>
                 </div>
+
+                <p class="borrow-ticket__fee-note">A ₱10 fee applies for every day the book is returned late.</p>
 
                 <div class="borrow-ticket__notice">
                     <div class="borrow-ticket__notice-top">
@@ -127,7 +119,7 @@
                         </div>
                     </div>
                     <hr class="borrow-ticket__notice-divider" />
-                    <a href="#" class="borrow-ticket__terms">
+                    <a href="#" class="borrow-ticket__terms is-disabled" aria-disabled="true" tabindex="-1">
                         <span><i class="bi bi-file-earmark-text-fill" aria-hidden="true"></i> Terms and Conditions</span>
                         <i class="bi bi-chevron-right" aria-hidden="true"></i>
                     </a>
@@ -135,13 +127,41 @@
 
                 <div class="borrow-ticket__actions">
                     <button type="button" class="btn borrow-ticket__cancel-btn" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn borrow-ticket__borrow-btn" data-bs-dismiss="modal">
+                    <button id="confirmBorrowBtn" type="button" class="btn borrow-ticket__borrow-btn" data-book-id="@book.Id">
                         <i class="bi bi-bookmark-fill" aria-hidden="true"></i> Borrow Now
                     </button>
                 </div>
 
-                <p class="borrow-ticket__footer">For questions or issues. <a href="#">Contact Us</a></p>
+                <p class="borrow-ticket__footer">For questions or issues. <a href="#" class="is-disabled" aria-disabled="true" tabindex="-1">Contact Us</a></p>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="claimModal" tabindex="-1" aria-labelledby="claimModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered borrow-modal-dialog">
+        <div class="modal-content borrow-modal-content">
+            <div class="borrow-modal-brand">
+                <img src="~/images/iborrowLogo.svg" asp-append-version="true" alt="iBorrow logo" class="borrow-modal-logo" />
+                <span class="borrow-modal-brand-text">
+                    <span class="borrow-modal-brand-name">iBorrow</span>
+                    <span class="borrow-modal-brand-sub">Library System</span>
+                </span>
+            </div>
+
+            <div class="borrow-ticket">
+                <div class="borrow-ticket__header" id="claimModalLabel">Reservation Confirmed</div>
+                <div class="borrow-ticket__row">
+                    <p class="mb-0 text-center">To claim your book, go to the library.</p>
+                </div>
+                <div class="borrow-ticket__actions">
+                    <button type="button" class="btn borrow-ticket__borrow-btn" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/book-details.js" asp-append-version="true"></script>
+}

@@ -55,6 +55,34 @@ public sealed class CirculationStore(AppDbContext db)
             .ToList();
     }
 
+    public BorrowerDetail? GetBorrowerDetail(string studentIdOrLibraryId)
+    {
+        var profile = db.Borrowers.AsNoTracking()
+            .FirstOrDefault(b => b.StudentId == studentIdOrLibraryId || b.LibraryId == studentIdOrLibraryId);
+        if (profile is null) return null;
+
+        var loans = db.Loans.AsNoTracking()
+            .Where(l => l.BorrowerId == profile.StudentId || l.BorrowerId == profile.LibraryId)
+            .OrderByDescending(l => l.DateBorrowed)
+            .ToList();
+
+        return new BorrowerDetail
+        {
+            LibraryId = profile.LibraryId,
+            StudentId = profile.StudentId,
+            Name = profile.Name,
+            Email = profile.Email,
+            Loans = loans.Select(l => new BorrowerLoanRecord
+            {
+                Book = l.Book,
+                DateBorrowed = l.DateBorrowed,
+                DueDate = l.DueDate,
+                Status = l.Status,
+                DateReturned = l.DateReturned ?? string.Empty
+            }).ToList()
+        };
+    }
+
     private static DateOnly DueDateFor(Loan item) =>
         TryParseDate(item.DueDate, out var dueDate) ? dueDate : ParseDate(item.DateBorrowed).AddDays(7);
 

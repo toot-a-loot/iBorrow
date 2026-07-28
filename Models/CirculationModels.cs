@@ -40,3 +40,21 @@ public class BorrowerOverview
     public string DateBorrowed { get; set; } = string.Empty;
     public int DaysRemaining { get; set; }
 }
+
+public class BorrowerLoanRecord
+{
+    public string Book { get; set; } = string.Empty;
+    public string DateBorrowed { get; set; } = string.Empty;
+    public string DueDate { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public string DateReturned { get; set; } = string.Empty;
+}
+
+public class BorrowerDetail
+{
+    public string LibraryId { get; set; } = string.Empty;
+    public string StudentId { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public List<BorrowerLoanRecord> Loans { get; set; } = [];
+}

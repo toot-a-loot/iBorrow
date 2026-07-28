@@ -105,79 +105,7 @@
         </a>
     </div>
 
-    <div class="home-book-grid" role="list" aria-label="Available books">
-
-        <a class="book-card text-decoration-none text-reset" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available" asp-controller="Book" asp-action="Details" asp-route-id="1">
-            <div class="book-card__cover-wrapper">
-                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
-            </div>
-            <div class="book-card__body">
-                <h3 class="book-card__title">1984</h3>
-                <p class="book-card__author">George Orwell</p>
-                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
-                    <span class="book-card__badge-dot" aria-hidden="true"></span>
-                    Available
-                </span>
-            </div>
-        </a>
-
-        <a class="book-card text-decoration-none text-reset" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Unavailable" asp-controller="Book" asp-action="Details" asp-route-id="2">
-            <div class="book-card__cover-wrapper">
-                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
-            </div>
-            <div class="book-card__body">
-                <h3 class="book-card__title">1984</h3>
-                <p class="book-card__author">George Orwell</p>
-                <span class="book-card__badge book-card__badge--unavailable" aria-label="Status: Unavailable">
-                    <span class="book-card__badge-dot" aria-hidden="true"></span>
-                    Unavailable
-                </span>
-            </div>
-        </a>
-
-        <a class="book-card text-decoration-none text-reset" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available" asp-controller="Book" asp-action="Details" asp-route-id="1">
-            <div class="book-card__cover-wrapper">
-                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
-            </div>
-            <div class="book-card__body">
-                <h3 class="book-card__title">1984</h3>
-                <p class="book-card__author">George Orwell</p>
-                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
-                    <span class="book-card__badge-dot" aria-hidden="true"></span>
-                    Available
-                </span>
-            </div>
-        </a>
-
-        <a class="book-card text-decoration-none text-reset" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available" asp-controller="Book" asp-action="Details" asp-route-id="1">
-            <div class="book-card__cover-wrapper">
-                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
-            </div>
-            <div class="book-card__body">
-                <h3 class="book-card__title">1984</h3>
-                <p class="book-card__author">George Orwell</p>
-                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
-                    <span class="book-card__badge-dot" aria-hidden="true"></span>
-                    Available
-                </span>
-            </div>
-        </a>
-
-        <a class="book-card text-decoration-none text-reset" role="listitem" tabindex="0" aria-label="1984 by George Orwell, Available" asp-controller="Book" asp-action="Details" asp-route-id="1">
-            <div class="book-card__cover-wrapper">
-                <img src="~/images/1984.avif" asp-append-version="true" alt="Book cover of 1984" class="book-card__cover" loading="lazy" />
-            </div>
-            <div class="book-card__body">
-                <h3 class="book-card__title">1984</h3>
-                <p class="book-card__author">George Orwell</p>
-                <span class="book-card__badge book-card__badge--available" aria-label="Status: Available">
-                    <span class="book-card__badge-dot" aria-hidden="true"></span>
-                    Available
-                </span>
-            </div>
-        </a>
-
-    </div>
+    <div id="homeBookGrid" class="home-book-grid" role="list" aria-label="Available books"></div>
 </section>
 
 @* Currently borrowed *@
@@ -231,3 +159,7 @@
         </ul>
     </div>
 </section>
+
+@section Scripts {
+    <script src="~/js/home.js" asp-append-version="true"></script>
+}

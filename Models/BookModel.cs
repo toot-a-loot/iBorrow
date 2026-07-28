@@ -11,9 +11,16 @@ public class BookItem
     public string CoverImageUrl { get; set; } = string.Empty;
     public int TotalCopies { get; set; } = 1;
     public string DateAdded { get; set; } = string.Empty;
+    public bool IsManuallyUnavailable { get; set; }
 }
 
 public class BookItemDto : BookItem
 {
     public bool IsAvailable { get; set; }
+}
+
+public class BookDetailsViewModel
+{
+    public BookItemDto Book { get; set; } = new();
+    public List<BookItemDto> Similar { get; set; } = [];
 }

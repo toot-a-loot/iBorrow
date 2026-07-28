@@ -45,6 +45,7 @@ public class AdminAddBooksController(BookStore books, IWebHostEnvironment env) :
         [FromForm] string synopsis,
         [FromForm] string? tags,
         [FromForm] int totalCopies,
+        [FromForm] string? status,
         IFormFile? coverImage)
     {
         if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(author) ||
@@ -84,7 +85,8 @@ public class AdminAddBooksController(BookStore books, IWebHostEnvironment env) :
             Synopsis = synopsis.Trim(),
             Tags = tagList,
             CoverImageUrl = coverUrl,
-            TotalCopies = Math.Max(totalCopies, 1)
+            TotalCopies = Math.Max(totalCopies, 1),
+            IsManuallyUnavailable = string.Equals(status, "unavailable", StringComparison.OrdinalIgnoreCase)
         };
 
         var saved = books.Add(item);
@@ -101,6 +103,7 @@ public class AdminAddBooksController(BookStore books, IWebHostEnvironment env) :
         [FromForm] string synopsis,
         [FromForm] string? tags,
         [FromForm] int totalCopies,
+        [FromForm] string? status,
         IFormFile? coverImage)
     {
         if (string.IsNullOrWhiteSpace(id))
@@ -144,7 +147,8 @@ public class AdminAddBooksController(BookStore books, IWebHostEnvironment env) :
             Synopsis = synopsis.Trim(),
             Tags = tagList,
             CoverImageUrl = coverUrl,
-            TotalCopies = Math.Max(totalCopies, 1)
+            TotalCopies = Math.Max(totalCopies, 1),
+            IsManuallyUnavailable = string.Equals(status, "unavailable", StringComparison.OrdinalIgnoreCase)
         };
 
         var updated = books.Update(item);

@@ -1,0 +1,154 @@
+@{
+    ViewData["Title"] = "Add Books";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin-add-books.css" asp-append-version="true" />
+}
+
+<div class="admin-shell">
+    <partial name="_AdminSidebar" />
+    <main class="admin-content" id="add-books-main">
+        <header class="admin-topbar">
+            <h1>Add Books</h1>
+            <span class="admin-user"><i class="bi bi-person-fill"></i> Admin</span>
+        </header>
+
+        <div class="add-books-body">
+
+            <!-- Toolbar -->
+            <div class="ab-toolbar">
+                <div class="ab-search-wrap">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <label class="visually-hidden" for="ab-search">Search books</label>
+                    <input id="ab-search" type="search" placeholder="Search by Name, ID" autocomplete="off" />
+                </div>
+                <button id="ab-filter-btn" class="ab-icon-btn" type="button" aria-expanded="false" aria-controls="ab-filter-panel" title="Filters">
+                    <i class="bi bi-sliders" aria-hidden="true"></i>
+                </button>
+                <button id="ab-add-btn" class="ab-primary-btn" type="button">Add Book</button>
+            </div>
+
+            <!-- Filter Panel -->
+            <div id="ab-filter-panel" class="ab-filter-panel" hidden>
+                <div class="ab-filter-inner">
+                    <div class="ab-filter-group">
+                        <h3 class="ab-filter-heading">Category</h3>
+                        <div class="ab-filter-checks" id="ab-cat-filters">
+                            @foreach (var cat in new[] { "Software Engineering", "Game Development", "Multimedia Arts", "Real Estate", "Filipiniana" })
+                            {
+                                var id = "cat-" + cat.Replace(" ", "-").ToLower();
+                                <label class="ab-check-label" for="@id">
+                                    <input type="checkbox" id="@id" class="ab-cat-check" value="@cat" />
+                                    @cat
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    <div class="ab-filter-group">
+                        <h3 class="ab-filter-heading">Tags</h3>
+                        <div class="ab-filter-checks ab-tag-checks" id="ab-tag-filters">
+                            <!-- populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Results -->
+            <section class="ab-category-section" id="ab-search-results-section" hidden aria-labelledby="ab-search-heading">
+                <h2 id="ab-search-heading">Search Results</h2>
+                <div class="ab-book-grid" id="ab-search-results"></div>
+                <button class="ab-see-more" id="ab-search-more" type="button" hidden>See More <span aria-hidden="true">→</span></button>
+            </section>
+
+            <!-- Category Sections -->
+            @foreach (var cat in new[] { "Software Engineering", "Game Development", "Multimedia Arts", "Real Estate", "Filipiniana" })
+            {
+                var sectionId = "ab-section-" + cat.Replace(" ", "-").ToLower();
+                var gridId    = "ab-grid-" + cat.Replace(" ", "-").ToLower();
+                var moreId    = "ab-more-" + cat.Replace(" ", "-").ToLower();
+                <section class="ab-category-section" id="@sectionId" aria-labelledby="@(sectionId)-heading">
+                    <h2 id="@(sectionId)-heading">@cat</h2>
+                    <div class="ab-book-grid" id="@gridId"></div>
+                    <button class="ab-see-more" id="@moreId" type="button" hidden>See More <span aria-hidden="true">→</span></button>
+                </section>
+            }
+
+        </div><!-- /.add-books-body -->
+
+        <!-- Add Book Modal -->
+        <div id="ab-modal-overlay" class="ab-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="ab-modal-title">
+            <div class="ab-modal">
+                <div class="ab-modal-header">
+                    <button id="ab-modal-back" class="ab-modal-back" type="button" aria-label="Close modal">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    </button>
+                    <h2 id="ab-modal-title">Add Book</h2>
+                </div>
+
+                <form id="ab-book-form" novalidate>
+                    <div class="ab-modal-body">
+                        <!-- Left column: fields -->
+                        <div class="ab-modal-fields">
+                            <div class="ab-field-group">
+                                <label class="ab-field-label" for="ab-f-title">Book Title</label>
+                                <input class="ab-field-input" id="ab-f-title" name="title" type="text" placeholder="Book Title" autocomplete="off" required />
+                            </div>
+                            <div class="ab-field-group">
+                                <label class="ab-field-label" for="ab-f-author">Author</label>
+                                <input class="ab-field-input" id="ab-f-author" name="author" type="text" placeholder="Author" autocomplete="off" required />
+                            </div>
+                            <div class="ab-field-group">
+                                <label class="ab-field-label" for="ab-f-category">Category</label>
+                                <select class="ab-field-input" id="ab-f-category" name="category" required>
+                                    <option value="">Category</option>
+                                    <option>Software Engineering</option>
+                                    <option>Game Development</option>
+                                    <option>Multimedia Arts</option>
+                                    <option>Real Estate</option>
+                                    <option>Filipiniana</option>
+                                </select>
+                            </div>
+                            <div class="ab-field-group">
+                                <label class="ab-field-label" for="ab-f-tags-input">Tags</label>
+                                <div class="ab-tag-select-wrap">
+                                    <div class="ab-tag-selected" id="ab-tag-chips"></div>
+                                    <input class="ab-tag-search-input" id="ab-f-tags-input" type="text" placeholder="Tags" autocomplete="off" aria-label="Search or create tags" />
+                                    <div class="ab-tag-dropdown" id="ab-tag-dropdown" hidden></div>
+                                </div>
+                            </div>
+                            <div class="ab-field-group">
+                                <label class="ab-field-label" for="ab-f-copies">Copies</label>
+                                <input class="ab-field-input" id="ab-f-copies" name="totalCopies" type="number" min="1" value="1" placeholder="1" />
+                            </div>
+                        </div>
+
+                        <!-- Middle column: synopsis + actions -->
+                        <div class="ab-modal-synopsis">
+                            <label class="ab-field-label" for="ab-f-synopsis">Synopsis</label>
+                            <textarea class="ab-field-textarea" id="ab-f-synopsis" name="synopsis" placeholder="Write a short Synopsis for the Book..." required></textarea>
+                            <div class="ab-modal-actions">
+                                <button id="ab-cancel-btn" class="ab-secondary-btn" type="button">Cancel</button>
+                                <button id="ab-submit-btn" class="ab-primary-btn" type="submit" disabled>Submit</button>
+                            </div>
+                        </div>
+
+                        <!-- Right column: cover -->
+                        <div class="ab-modal-cover">
+                            <div class="ab-cover-preview" id="ab-cover-preview">
+                                <span class="ab-cover-placeholder-text">Image Preview</span>
+                            </div>
+                            <button id="ab-upload-btn" class="ab-secondary-btn" type="button">Upload Book Cover</button>
+                            <input id="ab-cover-input" name="coverImage" type="file" accept=".png,.jpg,.jpeg,.webp" hidden />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+@section Scripts {
+    <script src="~/js/admin-add-books.js" asp-append-version="true"></script>
+}

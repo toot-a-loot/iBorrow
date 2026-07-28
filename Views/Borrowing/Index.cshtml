@@ -64,6 +64,7 @@
                         <label for="categorySelect" class="filter-group__label">Category</label>
                         <select id="categorySelect" name="categoryId" class="filter-group__select"
                                 aria-label="Filter by category">
+                                @* hardcoded *@
                             <option value="">All Categories</option>
                             <option value="1">Fiction</option>
                             <option value="2">Non-Fiction</option>
@@ -75,21 +76,24 @@
                         </select>
                     </div>
 
-                    <!-- Author Dropdown -->
+                    <!-- Availability Dropdown -->
                     <div class="filter-group">
-                        <label for="authorSelect" class="filter-group__label">Author</label>
-                        <select id="authorSelect" name="authorId" class="filter-group__select"
-                                aria-label="Filter by author">
-                            <!-- Future: <option value="">All Authors</option> -->
-                            @* <!-- Future: @foreach(var author in Model.Authors) {
-                            <option value="@author.Id">@author.Name</option>
-                            } --> *@
-                            <option value="">All Authors</option>
-                            <option value="1">George Orwell</option>
-                            <option value="2">J.K. Rowling</option>
-                            <option value="3">Haruki Murakami</option>
-                            <option value="4">Stephen King</option>
-                            <option value="5">Agatha Christie</option>
+                        <label for="availabilitySelect" class="filter-group__label">Availability</label>
+                        <select id="availabilitySelect" name="availability" class="filter-group__select"
+                                aria-label="Filter by availability">
+                            <option value="">All</option>
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+
+                    <!-- Courses Dropdown -->
+                    <div class="filter-group">
+                        <label for="courseSelect" class="filter-group__label">Courses</label>
+                        <select id="courseSelect" name="courseId" class="filter-group__select"
+                                aria-label="Filter by course">
+                            @* hardcoded *@
+                            <option value="">All Courses</option>
                         </select>
                     </div>
 
@@ -118,9 +122,8 @@
 </section>
 <!-- /Search Section -->
 
-<!-- ===================================================
-     Search Results Section
-     =================================================== -->
+@* Search result *@
+
 <section class="results-section" aria-label="Search Results">
 
     <!-- Results Heading -->

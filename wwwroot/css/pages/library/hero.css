@@ -4,11 +4,15 @@
   width: 100vw;
   margin-left: -50vw;
   margin-top: calc(-1 * var(--spacing-lg));
-  min-height: 20vh;
-  padding: var(--spacing-xxl) var(--spacing-xl);
+  min-height: 270px;
+  background-image: url('/images/heroImage_01.png');
+  background-size: cover;
+  background-position: center;
+  background-color: #1a1008;
+  padding-bottom: 70px;
   border-radius: 0;
   overflow: hidden;
-  background: #c2c2c2;
+  box-sizing: border-box;
 }
 
 .hero-banner::before {
@@ -17,8 +21,8 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(0, 0, 0, 0) 30%,
+    rgba(0, 0, 0, 0.75) 100%
   );
 }
 
@@ -26,6 +30,7 @@
   position: relative;
   z-index: 1;
   color: var(--color-white);
+  padding: 0 1.75rem;
 }
 
 .hero-title {
@@ -38,4 +43,15 @@
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 0;
+}
+
+@media (max-width: 576px) {
+  .hero-banner {
+    min-height: 220px;
+    padding-bottom: 56px;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+  }
 }

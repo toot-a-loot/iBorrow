@@ -5,11 +5,10 @@
     margin-left: -50vw;
     margin-top: calc(-1 * var(--spacing-lg));
     min-height: 270px;
-    background-image: url('/images/bookshelf-hero.jpg');
+    background-image: url('/images/heroImage_01.png');
     background-size: cover;
     background-position: center 40%;
     background-color: #1a1008;
-    /* fallback when image is absent */
     display: flex;
     align-items: flex-end;
     padding-bottom: 70px;
@@ -21,31 +20,27 @@
 .borrow-hero__overlay {
     position: absolute;
     inset: 0;
-    background: var(--borrow-color-overlay);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.75) 100%);
     z-index: 0;
 }
 
 .borrow-hero__content {
     position: relative;
     z-index: 1;
+    color: var(--color-white);
     padding: 0 1.75rem;
 }
 
 .borrow-hero__heading {
-    font-family: var(--font-base);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    color: var(--color-white);
-    margin-bottom: 0.35rem;
-    line-height: 1.15;
-    letter-spacing: -0.5px;
+    font-weight: 800;
+    font-size: 2.75rem;
+    margin-bottom: var(--spacing-xs);
 }
 
 .borrow-hero__subtitle {
     font-size: 1rem;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.85);
-    margin: 0;
+    font-weight: 500;
+    margin-bottom: 0;
 }
 
 @media (max-width: 576px) {

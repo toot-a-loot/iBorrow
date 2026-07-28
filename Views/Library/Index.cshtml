@@ -24,32 +24,35 @@
             <button class="btn btn-brand search-btn border-0" type="button">Search</button>
         </div>
 
-        <button class="btn advanced-filters-btn d-inline-flex align-items-center justify-content-center gap-2 flex-shrink-0" type="button">
+        <button class="btn advanced-filters-btn d-inline-flex align-items-center justify-content-center gap-2 flex-shrink-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters">
             <i class="bi bi-sliders" aria-hidden="true"></i>
             Advanced Filters
         </button>
     </div>
 
-    <hr class="search-divider" />
+    <div class="collapse" id="advancedFilters">
+        <hr class="search-divider" />
 
-    <div class="row g-3">
-        <div class="col-12 col-md-4">
-            <label class="form-label filter-label" for="categoryFilter">Category</label>
-            <select id="categoryFilter" class="form-select">
-                <option>All Categories</option>
-            </select>
-        </div>
-        <div class="col-12 col-md-4">
-            <label class="form-label filter-label" for="authorFilter">Author</label>
-            <select id="authorFilter" class="form-select">
-                <option>All Authors</option>
-            </select>
-        </div>
-        <div class="col-12 col-md-4">
-            <label class="form-label filter-label" for="sortFilter">Sort by</label>
-            <select id="sortFilter" class="form-select">
-                <option>Newest First</option>
-            </select>
+        <div class="row g-3">
+            <div class="col-12 col-md-4">
+                <label class="form-label filter-label" for="categoryFilter">Category</label>
+                <select id="categoryFilter" class="form-select">
+                    <option>All Categories</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label filter-label" for="authorFilter">Author</label>
+                <select id="authorFilter" class="form-select">
+                    <option>All Authors</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-4">
+                <label class="form-label filter-label" for="sortFilter">Sort by</label>
+                <select id="sortFilter" class="form-select">
+                    <option>Newest First</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>

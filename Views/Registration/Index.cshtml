@@ -20,20 +20,25 @@
             </div>
 
             <div class="registration-card">
-                @if (ViewBag.SuccessMessage != null)
-                {
-                    <div class="alert alert-success" role="alert">
-                        @ViewBag.SuccessMessage
-                    </div>
-                }
-
                 <form asp-action="Index" asp-controller="Registration" method="post" class="registration-form" novalidate>
                     @Html.AntiForgeryToken()
                     <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
 
                     <div class="form-field">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Enter full name" autofocus />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-field">
+                        <label asp-for="StudentId" class="form-label"></label>
+                        <input asp-for="StudentId" class="form-control" placeholder="c202401067" />
+                        <span asp-validation-for="StudentId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-field">
                         <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" placeholder="name@school.edu" autofocus />
+                        <input asp-for="Email" class="form-control" placeholder="name@school.edu" />
                         <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
 

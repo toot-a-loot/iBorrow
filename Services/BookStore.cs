@@ -1,9 +1,10 @@
-using System.Text.Json;
+using iBorrow.Data;
 using iBorrow.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace iBorrow.Services;
 
-public sealed class BookStore
+public sealed class BookStore(AppDbContext db, CirculationStore circulation)
 {
     private static readonly List<string> DefaultTags =
         ["Action", "Adventure", "Comedy", "Drama", "Fantasy", "Horror", "Romance"];
@@ -11,36 +12,21 @@ public sealed class BookStore
     private static readonly List<string> Categories =
         ["Software Engineering", "Game Development", "Multimedia Arts", "Real Estate", "Filipiniana"];
 
-    private readonly string _filePath;
-    private readonly CirculationStore _circulation;
-    private readonly object _sync = new();
-    private List<BookItem> _books = [];
-    private List<string> _tags = [];
-
-    public BookStore(IWebHostEnvironment environment, CirculationStore circulation)
-    {
-        var directory = Path.Combine(environment.ContentRootPath, "App_Data");
-        Directory.CreateDirectory(directory);
-        _filePath = Path.Combine(directory, "books.json");
-        _circulation = circulation;
-        Load();
-    }
-
     // ── Queries ──────────────────────────────────────────────────────────────
 
     public IReadOnlyList<string> GetCategories() => Categories.AsReadOnly();
 
     public IReadOnlyList<string> GetTags()
     {
-        lock (_sync) return _tags.ToList();
+        EnsureDefaultTags();
+        return [.. db.Tags.Select(t => t.Name).OrderBy(name => name)];
     }
 
     /// <summary>Returns all books enriched with live availability.</summary>
     public IReadOnlyList<BookItemDto> GetAll()
     {
-        List<BookItem> books;
-        lock (_sync) books = _books.ToList();
-        var activeBorrows = _circulation.GetAll().Borrowed
+        var books = db.Books.AsNoTracking().ToList();
+        var activeBorrows = circulation.GetAll().Borrowed
             .Where(b => !string.Equals(b.Status, "Returned", StringComparison.OrdinalIgnoreCase))
             .ToList();
         return books.Select(b => Enrich(b, activeBorrows)).ToList();
@@ -71,32 +57,22 @@ public sealed class BookStore
 
     public BookItem Add(BookItem item)
     {
-        lock (_sync)
-        {
-            item.Id = NextId();
-            item.DateAdded = DateTime.Today.ToString("yyyy-MM-dd");
-            if (item.TotalCopies < 1) item.TotalCopies = 1;
-            _books.Add(item);
-            // Ensure any new tags are persisted
-            foreach (var tag in item.Tags.Where(t => !string.IsNullOrWhiteSpace(t)))
-                EnsureTag(tag);
-            Save();
-            return item;
-        }
+        item.Id = NextId();
+        item.DateAdded = DateTime.Today.ToString("yyyy-MM-dd");
+        if (item.TotalCopies < 1) item.TotalCopies = 1;
+        db.Books.Add(item);
+        foreach (var tag in item.Tags.Where(t => !string.IsNullOrWhiteSpace(t)))
+            EnsureTag(tag);
+        db.SaveChanges();
+        return item;
     }
 
     public bool AddTag(string tag)
     {
         if (string.IsNullOrWhiteSpace(tag)) return false;
-        lock (_sync)
-        {
-            if (EnsureTag(tag.Trim()))
-            {
-                Save();
-                return true;
-            }
-            return false;
-        }
+        if (!EnsureTag(tag.Trim())) return false;
+        db.SaveChanges();
+        return true;
     }
 
     public bool Update(BookItem item)
@@ -161,35 +137,27 @@ public sealed class BookStore
     /// <returns>true if the tag was newly added; false if it already existed.</returns>
     private bool EnsureTag(string tag)
     {
-        if (_tags.Any(t => string.Equals(t, tag, StringComparison.OrdinalIgnoreCase))) return false;
-        _tags.Add(tag);
+        EnsureDefaultTags();
+        if (db.Tags.Local.Any(t => string.Equals(t.Name, tag, StringComparison.OrdinalIgnoreCase)) ||
+            db.Tags.Any(t => t.Name.ToLower() == tag.ToLower()))
+            return false;
+        db.Tags.Add(new LibraryTag { Name = tag });
         return true;
+    }
+
+    private void EnsureDefaultTags()
+    {
+        if (db.Tags.Any()) return;
+        db.Tags.AddRange(DefaultTags.Select(name => new LibraryTag { Name = name }));
+        db.SaveChanges();
     }
 
     private string NextId()
     {
-        var max = _books.Select(b => int.TryParse(b.Id?.Replace("BK", ""), out var n) ? n : 0).DefaultIfEmpty(0).Max();
+        var max = db.Books.Select(b => b.Id)
+            .AsEnumerable()
+            .Select(id => int.TryParse(id?.Replace("BK", ""), out var n) ? n : 0)
+            .DefaultIfEmpty(0).Max();
         return $"BK{(max + 1):D5}";
     }
-
-    private void Load()
-    {
-        if (!File.Exists(_filePath))
-        {
-            _books = [];
-            _tags = [.. DefaultTags];
-            Save();
-            return;
-        }
-        var data = JsonSerializer.Deserialize<StoreData>(File.ReadAllText(_filePath));
-        _books = data?.Books ?? [];
-        _tags = data?.Tags is { Count: > 0 } ? data.Tags : [.. DefaultTags];
-    }
-
-    private void Save() =>
-        File.WriteAllText(_filePath, JsonSerializer.Serialize(
-            new StoreData(_books, _tags),
-            new JsonSerializerOptions { WriteIndented = true }));
-
-    private sealed record StoreData(List<BookItem> Books, List<string> Tags);
 }

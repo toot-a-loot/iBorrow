@@ -1,72 +1,62 @@
-using System.Text.Json;
+using iBorrow.Data;
 using iBorrow.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace iBorrow.Services;
 
-public sealed class CirculationStore
+public sealed class CirculationStore(AppDbContext db)
 {
-    private readonly string _filePath;
-    private readonly object _sync = new();
-    private List<BorrowedBook> _borrowed = [];
-    private List<ReturnedBook> _returned = [];
-    private List<BorrowerProfile> _borrowers = [];
-
-    public CirculationStore(IWebHostEnvironment environment)
-    {
-        var directory = Path.Combine(environment.ContentRootPath, "App_Data");
-        Directory.CreateDirectory(directory);
-        _filePath = Path.Combine(directory, "circulation.json");
-        Load();
-    }
-
     public (IReadOnlyList<BorrowedBook> Borrowed, IReadOnlyList<ReturnedBook> Returned) GetAll()
     {
-        lock (_sync) return (_borrowed.ToList(), _returned.ToList());
+        var loans = db.Loans.AsNoTracking().ToList();
+        var borrowed = loans.Where(l => !string.Equals(l.Status, "Returned", StringComparison.OrdinalIgnoreCase))
+            .Select(ToBorrowedBook).ToList();
+        var returned = loans.Where(l => string.Equals(l.Status, "Returned", StringComparison.OrdinalIgnoreCase))
+            .Select(ToReturnedBook).ToList();
+        return (borrowed, returned);
     }
 
-    public IReadOnlyList<BorrowerProfile> GetBorrowers()
-    {
-        lock (_sync) return _borrowers.ToList();
-    }
+    public IReadOnlyList<BorrowerProfile> GetBorrowers() => [.. db.Borrowers.AsNoTracking()];
 
     public IReadOnlyList<BorrowerOverview> GetBorrowerOverview(DateOnly today)
     {
-        lock (_sync)
-        {
-            return _borrowed
-                .Where(item => !string.Equals(item.Status, "Returned", StringComparison.OrdinalIgnoreCase))
-                .GroupBy(item => item.BorrowerId)
-                .Select(group =>
+        var borrowers = db.Borrowers.AsNoTracking().ToList();
+        var loans = db.Loans.AsNoTracking()
+            .Where(l => l.Status != "Returned")
+            .ToList();
+
+        return loans
+            .GroupBy(item => item.BorrowerId)
+            .Select(group =>
+            {
+                var profile = borrowers.FirstOrDefault(item => item.StudentId == group.Key || item.LibraryId == group.Key);
+                var loanList = group.ToList();
+                var dueDates = loanList.Select(DueDateFor).ToList();
+                var dueDate = dueDates.Min();
+                var borrowedDate = loanList.Select(item => ParseDate(item.DateBorrowed)).Min();
+                var daysRemaining = dueDate.DayNumber - today.DayNumber;
+                var status = daysRemaining < 0 ? "Overdue" : daysRemaining == 1 ? "Nearly Due" : "Normal";
+                return new BorrowerOverview
                 {
-                    var profile = _borrowers.FirstOrDefault(item => item.StudentId == group.Key || item.LibraryId == group.Key);
-                    var loans = group.ToList();
-                    var dueDates = loans.Select(item => DueDateFor(item)).ToList();
-                    var dueDate = dueDates.Min();
-                    var borrowedDate = loans.Select(item => ParseDate(item.DateBorrowed)).Min();
-                    var daysRemaining = dueDate.DayNumber - today.DayNumber;
-                    var status = daysRemaining < 0 ? "Overdue" : daysRemaining == 1 ? "Nearly Due" : "Normal";
-                    return new BorrowerOverview
-                    {
-                        LibraryId = profile?.LibraryId ?? loans[0].Id,
-                        Name = profile?.Name ?? loans[0].BorrowerName,
-                        StudentId = profile?.StudentId ?? loans[0].BorrowerId,
-                        Course = profile?.Course ?? string.Empty,
-                        BorrowedBooks = loans.Sum(item => Math.Max(item.Copies, 1)),
-                        BookTitles = loans.Select(item => item.Book).Where(item => !string.IsNullOrWhiteSpace(item)).Distinct().ToList(),
-                        Status = status,
-                        DueDate = dueDate.ToString("yyyy-MM-dd"),
-                        DateBorrowed = borrowedDate.ToString("yyyy-MM-dd"),
-                        DaysRemaining = daysRemaining
-                    };
-                })
-                .OrderBy(item => item.Status == "Normal" ? 1 : 0)
-                .ThenBy(item => item.Status == "Overdue" ? item.DaysRemaining : int.MaxValue)
-                .ThenBy(item => item.DaysRemaining)
-                .ToList();
-        }
+                    LibraryId = profile?.LibraryId ?? loanList[0].Id,
+                    Name = profile?.Name ?? loanList[0].BorrowerName,
+                    StudentId = profile?.StudentId ?? loanList[0].BorrowerId,
+                    Course = profile?.Course ?? string.Empty,
+                    BorrowedBooks = loanList.Sum(item => Math.Max(item.Copies, 1)),
+                    BookTitles = loanList.Select(item => item.Book).Where(item => !string.IsNullOrWhiteSpace(item)).Distinct().ToList(),
+                    Status = status,
+                    DueDate = dueDate.ToString("yyyy-MM-dd"),
+                    DateBorrowed = borrowedDate.ToString("yyyy-MM-dd"),
+                    DaysRemaining = daysRemaining
+                };
+            })
+            .OrderBy(item => item.Status == "Normal" ? 1 : 0)
+            .ThenBy(item => item.Status == "Overdue" ? item.DaysRemaining : int.MaxValue)
+            .ThenBy(item => item.DaysRemaining)
+            .ToList();
     }
 
-    private static DateOnly DueDateFor(BorrowedBook item) =>
+    private static DateOnly DueDateFor(Loan item) =>
         TryParseDate(item.DueDate, out var dueDate) ? dueDate : ParseDate(item.DateBorrowed).AddDays(7);
 
     private static DateOnly ParseDate(string value) => TryParseDate(value, out var date) ? date : DateOnly.FromDateTime(DateTime.Today);
@@ -74,101 +64,99 @@ public sealed class CirculationStore
 
     public BorrowerProfile AddBorrower(BorrowerProfile item)
     {
-        lock (_sync)
-        {
-            item.LibraryId = NextId(_borrowers.Select(x => x.LibraryId));
-            item.Name = NormalizeName(item.Name);
-            _borrowers.Add(item);
-            Save();
-            return item;
-        }
+        item.LibraryId = NextId(db.Borrowers.Select(x => x.LibraryId));
+        item.Name = NormalizeName(item.Name);
+        db.Borrowers.Add(item);
+        db.SaveChanges();
+        return item;
     }
 
     public bool UpdateBorrower(string id, BorrowerProfile item)
     {
-        lock (_sync)
-        {
-            var current = _borrowers.FirstOrDefault(x => x.LibraryId == id);
-            if (current is null) return false;
-            current.StudentId = item.StudentId; current.Name = NormalizeName(item.Name); current.Course = item.Course;
-            current.ContactNo = item.ContactNo; current.Email = item.Email;
-            Save();
-            return true;
-        }
+        var current = db.Borrowers.FirstOrDefault(x => x.LibraryId == id);
+        if (current is null) return false;
+        current.StudentId = item.StudentId; current.Name = NormalizeName(item.Name); current.Course = item.Course;
+        current.ContactNo = item.ContactNo; current.Email = item.Email;
+        db.SaveChanges();
+        return true;
     }
 
     public BorrowedBook AddBorrowed(BorrowedBook item)
     {
-        lock (_sync)
+        var loan = new Loan
         {
-            item.Id = NextId(_borrowed.Select(x => x.Id).Concat(_returned.Select(x => x.Id)));
-            item.Status = "Borrowed";
-            _borrowed.Add(item);
-            Save();
-            return item;
-        }
+            Id = NextId(db.Loans.Select(x => x.Id)),
+            Book = item.Book,
+            BorrowerId = item.BorrowerId,
+            BorrowerName = item.BorrowerName,
+            DateBorrowed = item.DateBorrowed,
+            DueDate = item.DueDate,
+            Copies = item.Copies,
+            Status = "Borrowed"
+        };
+        db.Loans.Add(loan);
+        db.SaveChanges();
+        return ToBorrowedBook(loan);
     }
 
     public bool UpdateBorrowed(string id, BorrowedBook item)
     {
-        lock (_sync)
-        {
-            var current = _borrowed.FirstOrDefault(x => x.Id == id);
-            if (current is null) return false;
-            item.Id = id;
-            current.Book = item.Book; current.BorrowerId = item.BorrowerId; current.BorrowerName = item.BorrowerName;
-            current.DateBorrowed = item.DateBorrowed; current.DueDate = item.DueDate; current.Copies = item.Copies;
-            Save();
-            return true;
-        }
+        var current = db.Loans.FirstOrDefault(x => x.Id == id);
+        if (current is null) return false;
+        current.Book = item.Book; current.BorrowerId = item.BorrowerId; current.BorrowerName = item.BorrowerName;
+        current.DateBorrowed = item.DateBorrowed; current.DueDate = item.DueDate; current.Copies = item.Copies;
+        db.SaveChanges();
+        return true;
     }
 
     public ReturnedBook? MarkReturned(string id)
     {
-        lock (_sync)
-        {
-            var item = _borrowed.FirstOrDefault(x => x.Id == id);
-            if (item is null) return null;
-            item.Status = "Returned";
-            var returned = new ReturnedBook { Id = item.Id, Book = item.Book, BorrowerId = item.BorrowerId, BorrowerName = item.BorrowerName, DateBorrowed = item.DateBorrowed, DueDate = item.DueDate, Copies = item.Copies, Status = "Returned" };
-            Save();
-            return returned;
-        }
+        var loan = db.Loans.FirstOrDefault(x => x.Id == id);
+        if (loan is null) return null;
+        loan.Status = "Returned";
+        db.SaveChanges();
+        return ToReturnedBook(loan);
     }
 
     public ReturnedBook AddReturned(ReturnedBook item)
     {
-        lock (_sync)
+        var loan = new Loan
         {
-            if (string.IsNullOrWhiteSpace(item.Id)) item.Id = NextId(_borrowed.Select(x => x.Id).Concat(_returned.Select(x => x.Id)));
-            item.Status = "Returned";
-            _returned.Add(item);
-            Save();
-            return item;
-        }
+            Id = string.IsNullOrWhiteSpace(item.Id) ? NextId(db.Loans.Select(x => x.Id)) : item.Id,
+            Book = item.Book,
+            BorrowerId = item.BorrowerId,
+            BorrowerName = item.BorrowerName,
+            DateBorrowed = item.DateBorrowed,
+            DueDate = item.DueDate,
+            Copies = item.Copies,
+            Status = "Returned",
+            ProcessedBy = item.ProcessedBy,
+            DateReturned = item.DateReturned,
+            ReceivedBy = item.ReceivedBy
+        };
+        db.Loans.Add(loan);
+        db.SaveChanges();
+        return ToReturnedBook(loan);
     }
 
-    private void Load()
+    private static BorrowedBook ToBorrowedBook(Loan loan) => new()
     {
-        if (!File.Exists(_filePath))
-        {
-            _borrowed = [new BorrowedBook { Id = "01001", Book = "Trident", BorrowerId = "c202302014", BorrowerName = "Tai Taipae", DateBorrowed = "2023-07-07", DueDate = "2026-07-10", Copies = 3 }];
-            _borrowers = [new BorrowerProfile { LibraryId = "01001", StudentId = "c202401067", Name = "Doe, John", ContactNo = "901 001 0100", Email = "c202401067@iacademy.edu.ph" }];
-            Save();
-            return;
-        }
-        var data = JsonSerializer.Deserialize<StoreData>(File.ReadAllText(_filePath));
-        _borrowed = data?.Borrowed ?? [];
-        _returned = data?.Returned ?? [];
-        _borrowers = data?.Borrowers ?? [new BorrowerProfile { LibraryId = "01001", StudentId = "c202401067", Name = "Doe, John", ContactNo = "901 001 0100", Email = "c202401067@iacademy.edu.ph" }];
-    }
+        Id = loan.Id, Book = loan.Book, BorrowerId = loan.BorrowerId, BorrowerName = loan.BorrowerName,
+        DateBorrowed = loan.DateBorrowed, DueDate = loan.DueDate, Copies = loan.Copies, Status = loan.Status
+    };
 
-    private void Save() => File.WriteAllText(_filePath, JsonSerializer.Serialize(new StoreData(_borrowed, _returned, _borrowers), new JsonSerializerOptions { WriteIndented = true }));
+    private static ReturnedBook ToReturnedBook(Loan loan) => new()
+    {
+        Id = loan.Id, Book = loan.Book, BorrowerId = loan.BorrowerId, BorrowerName = loan.BorrowerName,
+        DateBorrowed = loan.DateBorrowed, DueDate = loan.DueDate, Copies = loan.Copies, Status = loan.Status,
+        ProcessedBy = loan.ProcessedBy ?? string.Empty, DateReturned = loan.DateReturned ?? string.Empty, ReceivedBy = loan.ReceivedBy ?? string.Empty
+    };
+
     private static string NextId(IEnumerable<string> ids) => (ids.Select(id => int.TryParse(id, out var number) ? number : 1000).DefaultIfEmpty(1000).Max() + 1).ToString("D5");
+
     private static string NormalizeName(string name)
     {
         var parts = name.Split(',', 2, StringSplitOptions.TrimEntries);
-        return $"{parts[0]}, {parts[1]}";
+        return parts.Length == 2 ? $"{parts[0]}, {parts[1]}" : parts[0];
     }
-    private sealed record StoreData(List<BorrowedBook> Borrowed, List<ReturnedBook> Returned, List<BorrowerProfile>? Borrowers = null);
 }

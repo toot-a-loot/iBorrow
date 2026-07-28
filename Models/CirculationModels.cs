@@ -27,6 +27,7 @@ public class BorrowerProfile
     public string Course { get; set; } = string.Empty;
     public string ContactNo { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
+    public string? UserId { get; set; }
 }
 
 public class BorrowerOverview

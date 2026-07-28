@@ -6,10 +6,10 @@
         const date = new Date(`${value}T00:00:00`);
         return Number.isNaN(date.valueOf()) ? value : date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' });
     };
-    const searchable = row => [row.libraryId, row.name, row.studentId, row.course, ...(row.bookTitles || [])].join(' ').toLowerCase();
+    const searchable = row => [row.name, row.studentId, ...(row.bookTitles || [])].join(' ').toLowerCase();
     const matches = row => !state.query || searchable(row).includes(state.query.toLowerCase());
     const card = row => `<a class="borrower-card borrower-card--${row.status.toLowerCase().replaceAll(' ', '-')}" href="/AdminBorrowers/Profile?studentId=${encodeURIComponent(row.studentId)}" aria-label="Open profile for ${escapeHtml(row.name)}">
-        <div class="borrower-card__details"><div class="borrower-card__library">${escapeHtml(row.libraryId)}</div><strong>${escapeHtml(row.name || 'Unknown student')}</strong><div class="borrower-card__muted">${escapeHtml(row.studentId)}</div><div class="borrower-card__muted">${escapeHtml(row.course || 'Course not provided')}</div><div class="borrower-card__books">Books Borrowed: ${row.borrowedBooks}<br><span>${(row.bookTitles || []).map(escapeHtml).join(', ') || 'No titles provided'}</span></div></div>
+        <div class="borrower-card__details"><strong>${escapeHtml(row.name || 'Unknown student')}</strong><div class="borrower-card__muted">${escapeHtml(row.studentId)}</div><div class="borrower-card__books">Books Borrowed: ${row.borrowedBooks}<br><span>${(row.bookTitles || []).map(escapeHtml).join(', ') || 'No titles provided'}</span></div></div>
         <div class="borrower-card__meta"><span class="status-badge">${escapeHtml(row.status)}</span><div>Due: <b>${formatDate(row.dueDate)}</b></div><div>Borrowed: ${formatDate(row.dateBorrowed)}</div></div>
     </a>`;
     function sectionRows(kind) {
